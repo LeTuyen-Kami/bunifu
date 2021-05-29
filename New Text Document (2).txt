@@ -1,0 +1,30 @@
+ if (message.style == 1)
+                    {
+                        Create_Connect();
+                        string sqll = "select * from Account where Taikhoan='" + message.tk + "' and Matkhau='" + message.mk + "'";
+                        SqlCommand cmd = new SqlCommand(sqll, strConnect);
+                        SqlDataReader dta = cmd.ExecuteReader();
+                        if (dta.Read() == true)
+                        {
+                            int IdIndex = dta.GetOrdinal("Id");
+                            string Id = dta.GetString(IdIndex);
+                            client.Send(Serialize(Id));
+                        }
+                        else
+                        {
+                            int temp = 0;
+                            client.Send(Serialize(temp));
+                        }
+                    }
+                    else
+                    {
+                        //khi 1 client gửi thì cả server và các client (ngoại trừ thằng client vừa gửi) cùng nhận đc
+                        foreach (Socket item in clientList)
+                        {
+                            if (item != null && item != client)
+                            {
+                                item.Send(Serialize(message));
+                            }
+                        }
+
+                    }

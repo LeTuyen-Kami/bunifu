@@ -1,0 +1,23 @@
+private void bunifuTextBox1_TextChange(object sender, EventArgs e)
+        {
+            string temp;
+
+            if (bunifuTextBox1.Text.StartsWith("@")) {
+                temp = bunifuTextBox1.Text.Replace("@", "");
+                DataSet data = new DataSet();
+                string query = "select ten from Account where Matkhau LIKE '" + temp + "' + '%'";
+                using (SqlConnection sql = new SqlConnection
+                    ("Data Source=LAPTOP-EGRB430C\\SQLEXPRESS;Initial Catalog=ten;Integrated Security=True"))
+                {
+                    sql.Open();
+                    SqlDataAdapter adapter = new SqlDataAdapter(query, sql);
+                    adapter.Fill(data);
+                    bunifuDataGridView1.Visible = true;
+                    bunifuDataGridView1.AutoResizeRows();
+                    bunifuDataGridView1.DataSource = data.Tables[0];
+                    bunifuDataGridView1.Size = new Size(bunifuDataGridView1.Width, bunifuDataGridView1.RowCount*41);
+                    sql.Close();
+                }
+            }
+                    
+        }
