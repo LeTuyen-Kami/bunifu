@@ -28,6 +28,8 @@ namespace bunifu
         bool isconnect;
         int dem = 0;
         DateTime now = DateTime.Now;
+        DataTable dataTable1 = new DataTable();
+        DataTable dataTable2 = new DataTable();
         string Id_M = "1";
         public none()
         {
@@ -102,6 +104,10 @@ namespace bunifu
                     if (message.style==10)
                     {
                         DataSet ds = message.ds;
+                        dataTable1 = ds.Tables["data"];
+                        MemoryStream mem = new MemoryStream((byte[])dataTable1.Rows[0][4]);
+                        guna2CirclePictureBox1.Image = Image.FromStream(mem);
+                        guna2CirclePictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
                         DataTable dt = ds.Tables[0];
                         foreach (DataRow row in dt.Rows)
                         {
@@ -133,7 +139,7 @@ namespace bunifu
                             }    
                         }
                     }   
-                    else
+                    if (message.style==0)
                     {
                         string s = now.Day.ToString() + "/" + now.Month + " " + now.Hour.ToString() + ":" + now.Minute.ToString() + ":" + now.Second.ToString();
                         this.BeginInvoke((MethodInvoker)delegate ()
@@ -150,7 +156,7 @@ namespace bunifu
             }
             catch
             {
-                Close();
+                close();
             }
         }
         byte[] Serialize(object obj)
@@ -191,7 +197,11 @@ namespace bunifu
 
         private void bunifuImageButton2_Click(object sender, EventArgs e)
         {
-
+            Myinfo minfo = new Myinfo();
+            minfo.RId(Id_M);
+            minfo.Dock = DockStyle.Fill;
+            panel1.Controls.Add(minfo);
+            minfo.BringToFront();
         }
 
         private void bunifuImageButton2_MouseHover(object sender, EventArgs e)
@@ -223,7 +233,7 @@ namespace bunifu
                 if (temp == "all")
                     temp = "";
                 DataSet data = new DataSet();
-                string query = "select ten from Account where Id LIKE '" + temp + "' + '%'";
+                string query = "select Ten from Account where Id LIKE '" + temp + "' + '%'";
                 using (SqlConnection sql = new SqlConnection
                     ("Data Source=LAPTOP-EGRB430C\\SQLEXPRESS;Initial Catalog=ten;Integrated Security=True"))
                 {
@@ -233,13 +243,6 @@ namespace bunifu
                     guna2DataGridView1.Visible = true;
                     guna2DataGridView1.AutoResizeRows();
                     DataTable dt = data.Tables[0];
-                    foreach (DataRow row in dt.Rows)
-                    {
-                        foreach (DataColumn col in dt.Columns)
-                        {
-                            row[col] = Decrypt(row[col].ToString());
-                        }
-                    }
                     guna2DataGridView1.DataSource = dt;
                     guna2DataGridView1.Size = new Size(guna2DataGridView1.Width,
                         guna2DataGridView1.RowCount * guna2DataGridView1.RowTemplate.Height);

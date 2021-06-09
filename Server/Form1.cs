@@ -130,10 +130,35 @@ namespace Server
                     //chuyển data từ dạng byte sang dạng string
                     data message = (data)Deseriliaze(datat);
                     AddMessage(message.style.ToString());
+                    if (message.style == 0)
+                    {
+                        Create_Connect();
+                        string sql = "Insert into Message (Id_S, Id_R, Message,Time) "
+                                                         + " values (@s, @r, @msg,@time) ";
+                        SqlCommand cmd = strConnect.CreateCommand();
+                        cmd.CommandText = sql;
+                        cmd.Parameters.Add("@s", SqlDbType.Int).Value = message.id_send;
+                        cmd.Parameters.Add("@r", SqlDbType.Int).Value = message.id_recv;
+                        cmd.Parameters.Add("@msg", SqlDbType.NVarChar).Value = message.msg;
+                        cmd.Parameters.Add("@time", SqlDbType.NVarChar).Value = message.time;
+                        cmd.ExecuteNonQuery();
+                        strConnect.Close();
+                        this.BeginInvoke((MethodInvoker)delegate ()
+                        {
+                            foreach (Socket item in clientList)
+                            {
+                                if (item != null && item != client)
+                                {
+                                    item.Send(Serialize(message));
+                                }
+                            }
+                        });
+
+                    }
                     if (message.style == 1)
                     {
                         Create_Connect();
-                        string sqll = "select * from Account where Taikhoan='" + message.tk + "' and Matkhau='" + message.mk + "'";
+                        string sqll = "select Id from Account where Taikhoan='" + message.tk + "' and Matkhau='" + message.mk + "'";
                         SqlCommand cmd = new SqlCommand(sqll, strConnect);
                         SqlDataReader dta = cmd.ExecuteReader();
                         if (dta.Read() == true)
@@ -176,45 +201,26 @@ namespace Server
                             //strConnect.Dispose();
                         }
                     }
-                    if (message.style==0)
-                    {
-                        Create_Connect();
-                        string sql = "Insert into Message (Id_S, Id_R, Message,Time) "
-                                                         + " values (@s, @r, @msg,@time) ";
-                        SqlCommand cmd = strConnect.CreateCommand();
-                        cmd.CommandText = sql;                        
-                        cmd.Parameters.Add("@s", SqlDbType.Int).Value = message.id_send;
-                        cmd.Parameters.Add("@r", SqlDbType.Int).Value = message.id_recv;
-                        cmd.Parameters.Add("@msg", SqlDbType.NVarChar).Value = message.msg;
-                        cmd.Parameters.Add("@time", SqlDbType.NVarChar).Value = message.time;
-                        cmd.ExecuteNonQuery();
-                        strConnect.Close();
-                        this.BeginInvoke((MethodInvoker)delegate ()
-                        {
-                            foreach (Socket item in clientList)
-                            {
-                                if (item != null && item != client)
-                                {
-                                    item.Send(Serialize(message));
-                                }
-                            }
-                        });
-                        
-                    }  
-                    if (message.style==3)
+
+                    if (message.style == 3)
                     {
                         data dt = new data();
                         DataSet ds = new DataSet();
                         dt.style = 10;
                         Create_Connect();
-                        string sqll = "select Id_M,Id_N from Friend where Id_M='"+message.id_send+"' or Id_N='"+ message.id_send+"'";
+                        string sqll = "select id_m,id_n from friend where id_m='" + message.id_send + "' or id_n='" + message.id_send + "'";
                         SqlDataAdapter adapter = new SqlDataAdapter(sqll, strConnect);
-                        //SqlCommand cmd = new SqlCommand(sqll, strConnect);
-                        adapter.Fill(ds);
+                        adapter.Fill(ds,"ban");
+                        sqll = "select * from Account where Id='" + message.id_send + "'";
+                        adapter.SelectCommand.CommandText = sqll;
+                        adapter.Fill(ds,"data");
+                        //    sqll = "select Account.Ten from Account,ketban where ketban.Nguoigui='" + message.id_send + "' and Account.Id=ketban.Nguoinhan";
+                        //    adapter = new SqlDataAdapter(sqll, strConnect);
+                        //    adapter.Fill(ds.Tables[2]);
                         dt.ds = ds;
                         client.Send(Serialize(dt));
                         strConnect.Close();
-                    }  
+                    }
                     if (message.style==4)
                     {
                         Create_Connect();
@@ -240,8 +246,22 @@ namespace Server
                                 }
                             }
                         });
-                    }    
-
+                    }
+                    if (message.style == 5)
+                    {
+                        Create_Connect();
+                        string sql = "Update Account set Taikhoan=@tk,Matkhau=@mk,Img=@img,Ngaysinh=@ns,Sex=@s,Ten=@ten  where Id=@id";
+                        SqlCommand cmd = strConnect.CreateCommand();
+                        cmd.CommandText = sql;
+                        cmd.Parameters.Add("@tk", SqlDbType.NVarChar).Value = message.tk;
+                        cmd.Parameters.Add("@mk", SqlDbType.NVarChar).Value = message.mk;
+                        cmd.Parameters.Add("@img", SqlDbType.Image).Value = message.img;
+                        cmd.Parameters.Add("@ns", SqlDbType.NVarChar).Value = message.ngaysinh;
+                        cmd.Parameters.Add("@s", SqlDbType.NVarChar).Value = message.sex;
+                        cmd.Parameters.Add("@ten", SqlDbType.NVarChar).Value = message.ten;
+                        cmd.Parameters.Add("@id", SqlDbType.Int).Value = message.id;
+                        cmd.ExecuteNonQuery();
+                    }
                 }
             }
             catch

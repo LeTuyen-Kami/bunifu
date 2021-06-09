@@ -21,6 +21,7 @@ namespace bunifu
         public LoginC()
         {
             InitializeComponent();
+            CheckForIllegalCrossThreadCalls = false;
         }
         IPEndPoint IP;
         Socket client;
@@ -165,10 +166,8 @@ namespace bunifu
                 {
                     Connect();
                     data dt = new data();
-                    string tk = Encrypt(bunifuTextBox1.Text);
+                    string tk = bunifuTextBox1.Text;
                     string mk = Encrypt(bunifuTextBox2.Text);
-                    //string tk = bunifuTextBox1.Text;
-                    //string mk = bunifuTextBox2.Text;
                     dt.tk = tk;
                     dt.mk = mk;
                     dt.style = 1;

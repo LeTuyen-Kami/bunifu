@@ -10,14 +10,19 @@ namespace bunifu
     [Serializable]
     public class data
     {
-        public string ten="";
-        public string msg="";
-        public int style=0;
-        public string tk="";
-        public string mk="";
+        public string ten = "";
+        public string msg = "";
+        public int style = 0;
+        public string tk = "";
+        public string mk = "";
         public int id_send;
         public int id_recv;
         public string time;
         public DataSet ds;
+        public byte[] img;
+        public string ngaysinh = "";
+        public string ngaytao = "";
+        public string sex = "";
+        public string id = "";
     }
 }
