@@ -154,6 +154,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Banbe.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Banbe.Designer.cs">
+      <DependentUpon>Banbe.cs</DependentUpon>
+    </Compile>
     <Compile Include="buble.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -168,6 +174,12 @@
     </Compile>
     <Compile Include="Class1.cs" />
     <Compile Include="Client.cs" />
+    <Compile Include="Friend.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Friend.Designer.cs">
+      <DependentUpon>Friend.cs</DependentUpon>
+    </Compile>
     <Compile Include="Info.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -192,8 +204,20 @@
     <Compile Include="Myinfo.Designer.cs">
       <DependentUpon>Myinfo.cs</DependentUpon>
     </Compile>
+    <Compile Include="Noctice.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Noctice.Designer.cs">
+      <DependentUpon>Noctice.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Setnotice.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Setnotice.Designer.cs">
+      <DependentUpon>Setnotice.cs</DependentUpon>
+    </Compile>
     <Compile Include="Signup.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -206,11 +230,17 @@
     <Compile Include="UI.Designer.cs">
       <DependentUpon>UI.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Banbe.resx">
+      <DependentUpon>Banbe.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="buble.resx">
       <DependentUpon>buble.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="chatbox.resx">
       <DependentUpon>chatbox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Friend.resx">
+      <DependentUpon>Friend.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Info.resx">
       <DependentUpon>Info.cs</DependentUpon>
@@ -224,6 +254,9 @@
     <EmbeddedResource Include="Myinfo.resx">
       <DependentUpon>Myinfo.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Noctice.resx">
+      <DependentUpon>Noctice.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\licenses.licx" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -235,6 +268,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="Setnotice.resx">
+      <DependentUpon>Setnotice.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Signup.resx">
       <DependentUpon>Signup.cs</DependentUpon>
     </EmbeddedResource>
@@ -293,6 +329,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="icon.ico" />
+    <None Include="Resources\friends %281%29.png" />
+    <None Include="Resources\friends.png" />
+    <None Include="Resources\notification %281%29.png" />
     <None Include="Resources\magnifier.png" />
     <None Include="Resources\home.png" />
     <None Include="Resources\menu.png" />

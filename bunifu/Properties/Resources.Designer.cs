@@ -123,6 +123,26 @@ namespace bunifu.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap friends {
+            get {
+                object obj = ResourceManager.GetObject("friends", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap friends__1_ {
+            get {
+                object obj = ResourceManager.GetObject("friends (1)", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap google {
             get {
                 object obj = ResourceManager.GetObject("google", resourceCulture);
@@ -176,6 +196,16 @@ namespace bunifu.Properties {
         internal static System.Drawing.Bitmap menu {
             get {
                 object obj = ResourceManager.GetObject("menu", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap notification__1_ {
+            get {
+                object obj = ResourceManager.GetObject("notification (1)", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

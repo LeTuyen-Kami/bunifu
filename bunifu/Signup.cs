@@ -195,10 +195,11 @@ namespace bunifu
                         {
                             Connect();
                             data dt = new data();
-                            string ten = Encrypt(bunifuTextBox1.Text);
-                            string tk = Encrypt(bunifuTextBox2.Text);
+                            string ten = bunifuTextBox1.Text;
+                            string tk = bunifuTextBox2.Text;
                             string mk = Encrypt(bunifuTextBox3.Text);
                             dt.ten = ten;
+                            dt.img = File.ReadAllBytes(@"D:\Lập trình mạng\bunifu\user.png");
                             dt.tk = tk;
                             dt.mk = mk;
                             dt.style = 2;

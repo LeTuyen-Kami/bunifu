@@ -33,34 +33,52 @@ namespace bunifu
         {
             if (temp % 2 == 0)
             {
-                guna2TextBox3.UseSystemPasswordChar = false;
+                Matkhau.UseSystemPasswordChar = false;
             }
             else
             {
-                guna2TextBox3.UseSystemPasswordChar = true;
+                Matkhau.UseSystemPasswordChar = true;
             }
             temp++;
         }
 
         private void Myinfo_Load(object sender, EventArgs e)
         {
-
+            
         }
-        public void dataset(DataTable dataTable)
+        public void datatable(DataTable dataTable)
         {
             Data = dataTable;
+            Id.Text = Data.Rows[0][0].ToString();
+            Taikhoan.Text = Data.Rows[0][1].ToString();
+            Matkhau.Text = Decrypt(Data.Rows[0][2].ToString());
+            Ten.Text = Data.Rows[0][3].ToString();
+            Gt.Text = Data.Rows[0][5].ToString();
+            Ns.Text = Data.Rows[0][6].ToString();
+            Nt.Text = Data.Rows[0][7].ToString();
+            MemoryStream mem = new MemoryStream((byte[])Data.Rows[0][4]);
+            pictureBox1.Image = Image.FromStream(mem);
+            pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
+            Id.ReadOnly = true;
+            Taikhoan.ReadOnly = true;
+            Matkhau.ReadOnly = true;
+            Ten.ReadOnly = true;
+            Gt.ReadOnly = true;
+            Ns.ReadOnly = true;
+            Nt.ReadOnly = true;
         }
         private void pictureBox1_Click(object sender, EventArgs e)
         {
-            OpenFileDialog open = new OpenFileDialog();
-            // image filters  
-            open.Filter = "Image Files(*.jpg; *.jpeg; *.gif; *.bmp)|*.jpg; *.jpeg; *.gif; *.bmp;*.png";
-            if (open.ShowDialog() == DialogResult.OK)
+            using (OpenFileDialog open = new OpenFileDialog())
             {
-                // display image in picture box  
-                pictureBox1.Image = new Bitmap(open.FileName);
-                pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
-            }
+                open.Filter = "Image Files(*.jpg; *.jpeg; *.gif; *.bmp)|*.jpg; *.jpeg; *.gif; *.bmp;*.png";
+                if (open.ShowDialog() == DialogResult.OK)
+                {
+                    // display image in picture box  
+                    pictureBox1.Image = new Bitmap(open.FileName);
+                    pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
+                }
+            }                          
         }
         public enum PasswordScore
         {
@@ -97,43 +115,66 @@ namespace bunifu
 
         private void guna2Button1_Click(object sender, EventArgs e)
         {
-            if (guna2TextBox1.Text != "" && guna2TextBox2.Text != "" && guna2TextBox3.Text != "")
+            long jpegByteSize;
+            using (var ms = new MemoryStream()) // estimatedLength can be original fileLength
             {
-                if ((int)checkpass(guna2TextBox3.Text) < 3)
+                pictureBox1.Image.Save(ms, pictureBox1.Image.RawFormat); // save image to stream in Jpeg format
+                jpegByteSize = ms.Length;
+            }
+            if (Ten.Text != "" && Taikhoan.Text != "" && Matkhau.Text != "")
+            {
+                if ((int)checkpass(Matkhau.Text) < 3)
                 {
                     label12.Text = "Password is too weak";
                     label12.Visible = true;
                 }
                 else
                 {
-                    try
+                    if (jpegByteSize < 1000000)
                     {
-                        data dt = new data();
-                        string ten = guna2TextBox1.Text;
-                        string tk = guna2TextBox2.Text;
-                        string mk = Encrypt(guna2TextBox3.Text);
-                        string gt = guna2TextBox4.Text;
-                        string ngaysinh = guna2TextBox5.Text;
-                        dt.ten = ten;
-                        dt.tk = tk;
-                        dt.mk = mk;
-                        dt.id = Id_M;
-                        dt.ngaysinh = ngaysinh;
-                        dt.sex = gt;
-                        MemoryStream mem = new MemoryStream();
-                        pictureBox1.Image.Save(mem, pictureBox1.Image.RawFormat);
-                        dt.img = mem.ToArray();
-                        dt.style = 5;
-                        clienT.Send(dt);
+                        try
+                        {
+                            
+                            data dt = new data();
+                            string ten = Ten.Text;
+                            string tk = Taikhoan.Text;
+                            string mk = Encrypt(Matkhau.Text);
+                            string gt = Gt.Text;
+                            string ngaysinh = Ns.Text;
+                            dt.ten = ten;
+                            dt.tk = tk;
+                            dt.mk = mk;
+                            dt.id = Id_M;
+                            dt.ngaysinh = ngaysinh;
+                            dt.sex = gt;
+                            MemoryStream mem = new MemoryStream();
+                            pictureBox1.Image.Save(mem, pictureBox1.Image.RawFormat);
+                            dt.img = mem.ToArray();                                            
+                            dt.style = 5;
+                            clienT.Send(dt);
+                            none no = (none)(this.ParentForm);
+                            no.changeImage(pictureBox1.Image);
+                            Data.Rows[0]["Ten"] = Ten.Text;
+                            Data.Rows[0]["Taikhoan"] = Taikhoan.Text;
+                            Data.Rows[0]["Matkhau"] = Encrypt(Matkhau.Text);
+                            Data.Rows[0]["Sex"] = Gt.Text;
+                            Data.Rows[0]["Ngaysinh"] = Ns.Text;
+                            Data.Rows[0]["Img"] = dt.img;
+                            no.recvdata(Data);
+                        }
+                        catch { }
                     }
-                    catch { }
-
+                    else
+                    {
+                        label13.Text = "Hình ảnh có dung lượng quá lớn";
+                        label13.Visible = true;
+                    }
                 }
             }
             else
             {
-                label5.Text = "Please fill it out completely";
-                label5.Visible = true;
+                label13.Text = "Please fill it out completely";
+                label13.Visible = true;
             }
         }
         public void RId(string id)
@@ -193,40 +234,39 @@ namespace bunifu
 
         private void label7_Click(object sender, EventArgs e)
         {
-            guna2TextBox1.Enabled = true;
-
+            Ten.ReadOnly = false;
         }
 
         private void label8_Click(object sender, EventArgs e)
         {
-            guna2TextBox2.Enabled = true;
+            Taikhoan.ReadOnly = false;
 
         }
 
         private void label9_Click(object sender, EventArgs e)
         {
-            guna2TextBox3.Enabled = true;
+            Matkhau.ReadOnly = false;
 
         }
 
         private void label10_Click(object sender, EventArgs e)
         {
-            guna2TextBox4.Enabled = true;
+            Gt.ReadOnly = false;
 
         }
 
         private void label11_Click(object sender, EventArgs e)
         {
-            guna2TextBox5.Enabled = true;
+            Ns.ReadOnly = false;
 
         }
         int dem = 0;
 
         private void guna2TextBox3_TextChanged(object sender, EventArgs e)
         {
-            if (guna2TextBox3.Text != "" && dem != 0)
+            if (Matkhau.Text != "" && dem != 0)
             {
-                label12.Text = checkpass(guna2TextBox3.Text).ToString();
+                label12.Text = checkpass(Matkhau.Text).ToString();
                 label12.Visible = true;
             }
             else

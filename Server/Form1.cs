@@ -184,8 +184,8 @@ namespace Server
                         }
                         else {
                             Create_Connect();
-                            string sql = "Insert into Account (Taikhoan, Matkhau, Ten) "
-                                                             + " values (@tk, @mk, @ten) ";
+                            string sql = "Insert into Account (Taikhoan, Matkhau, Ten,Ngaytao,Img) "
+                                                             + " values (@tk, @mk, @ten,@nt,@img) ";
                             SqlCommand cmd = strConnect.CreateCommand();
                             cmd.CommandText = sql;
                             SqlParameter gradeParam = new SqlParameter("@tk", SqlDbType.NVarChar);
@@ -194,6 +194,9 @@ namespace Server
                             SqlParameter highSalaryParam = cmd.Parameters.Add("@mk", SqlDbType.NVarChar);
                             highSalaryParam.Value = message.mk;
                             cmd.Parameters.Add("@ten", SqlDbType.NVarChar).Value = message.ten;
+                            string s = now.Day.ToString() + "/" + now.Month + "/" + now.Year;
+                            cmd.Parameters.Add("@nt", SqlDbType.NVarChar).Value = s;
+                            cmd.Parameters.Add("@img", SqlDbType.Image).Value = message.img;
                             cmd.ExecuteNonQuery();
                             int temp = 0;
                             client.Send(Serialize(temp.ToString()));
@@ -208,15 +211,15 @@ namespace Server
                         DataSet ds = new DataSet();
                         dt.style = 10;
                         Create_Connect();
-                        string sqll = "select id_m,id_n from friend where id_m='" + message.id_send + "' or id_n='" + message.id_send + "'";
+                        string sqll = "select Account.Ten,Account.Id from Account,Friend where Friend.Id_M='"+message.id_send+"' and Friend.Id_N=Account.Id or Friend.Id_N='"+message.id_send+"' and Friend.Id_M=Account.Id";
                         SqlDataAdapter adapter = new SqlDataAdapter(sqll, strConnect);
                         adapter.Fill(ds,"ban");
                         sqll = "select * from Account where Id='" + message.id_send + "'";
                         adapter.SelectCommand.CommandText = sqll;
                         adapter.Fill(ds,"data");
-                        //    sqll = "select Account.Ten from Account,ketban where ketban.Nguoigui='" + message.id_send + "' and Account.Id=ketban.Nguoinhan";
-                        //    adapter = new SqlDataAdapter(sqll, strConnect);
-                        //    adapter.Fill(ds.Tables[2]);
+                        sqll = "select Ketban.Status,Ketban.Nguoigui,Ketban.Nguoinhan,Account.Ten,Ketban.Readed from Account,Ketban where Ketban.Nguoinhan='"+message.id_send+"'and Ketban.Nguoigui=Account.Id or Ketban.Nguoigui='"+message.id_send+"' and Ketban.Nguoinhan=Account.Id and Ketban.Status='Accept'";
+                        adapter.SelectCommand.CommandText = sqll;
+                        adapter.Fill(ds,"ketban");
                         dt.ds = ds;
                         client.Send(Serialize(dt));
                         strConnect.Close();
@@ -249,6 +252,8 @@ namespace Server
                     }
                     if (message.style == 5)
                     {
+                        data dt = new data();
+                        DataSet ds = new DataSet();
                         Create_Connect();
                         string sql = "Update Account set Taikhoan=@tk,Matkhau=@mk,Img=@img,Ngaysinh=@ns,Sex=@s,Ten=@ten  where Id=@id";
                         SqlCommand cmd = strConnect.CreateCommand();
@@ -261,7 +266,46 @@ namespace Server
                         cmd.Parameters.Add("@ten", SqlDbType.NVarChar).Value = message.ten;
                         cmd.Parameters.Add("@id", SqlDbType.Int).Value = message.id;
                         cmd.ExecuteNonQuery();
+                        strConnect.Close();
                     }
+                    if (message.style==6)
+                    {
+                        Create_Connect();
+                        string sql = "Update Ketban set Readed=@rd where Nguoigui=@ng or Nguoinhan=@nn";
+                        SqlCommand cmd = strConnect.CreateCommand();
+                        cmd.CommandText = sql;
+                        cmd.Parameters.Add("@rd", SqlDbType.Int).Value = 1;
+                        cmd.Parameters.Add("@ng", SqlDbType.Int).Value = message.id_send;
+                        cmd.Parameters.Add("@nn", SqlDbType.Int).Value = message.id_send;
+                        cmd.ExecuteNonQuery();
+                        strConnect.Close();
+                    }
+                    if (message.style == 7)
+                    {
+                        data dt = new data();
+                        DataSet ds = new DataSet();
+                        Create_Connect();
+                        string sql = "select Ten from Account where Id LIKE '" + message.msg + "' + '%'";
+                        SqlDataAdapter adapter = new SqlDataAdapter(sql, strConnect);
+                        adapter.Fill(ds, "banbe");
+                        dt.ds = ds;
+                        dt.style = 111;
+                        client.Send(Serialize(dt));
+                        strConnect.Close();
+                    } 
+                    if (message.style==8)
+                    {
+                        data dt = new data();
+                        DataSet ds = new DataSet();
+                        Create_Connect();
+                        string sql = "select * from Account where Id='" + message.id_send + "'";
+                        SqlDataAdapter adater = new SqlDataAdapter(sql, strConnect);
+                        adater.Fill(ds, "Info");
+                        dt.ds = ds;
+                        dt.style = 100;
+                        client.Send(Serialize(dt));
+                        strConnect.Close();
+                    }    
                 }
             }
             catch

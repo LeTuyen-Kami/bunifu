@@ -7,20 +7,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Net.Sockets;
+using System.Data.SqlClient;
 using System.Net;
+using System.Net.Sockets;
 using System.Threading;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 
 namespace bunifu
 {
-    public partial class Info : UserControl
+    public partial class Friend : UserControl
     {
         IPEndPoint IP;
         Socket client;
         bool isconnect;
-        public Info()
+        public Friend()
         {
             InitializeComponent();
         }
@@ -66,16 +67,13 @@ namespace bunifu
                     client.Receive(datat);
                     //chuyển data từ dạng byte sang dạng string
                     data dt = (data)Deseriliaze(datat);
-                    if (dt.style==100)
+                    if (dt.style==111)
                     {
-                        DataTable datainfo = new DataTable();
-                        datainfo = dt.ds.Tables["Info"];
-                        MemoryStream mem = new MemoryStream((byte[])datainfo.Rows[0]["Img"]);
-                        guna2PictureBox1.Image = Image.FromStream(mem);
-                        label6.Text = datainfo.Rows[0]["Ten"].ToString();
-                        label7.Text = datainfo.Rows[0]["Sex"].ToString();
-                        label8.Text= datainfo.Rows[0]["Ngaysinh"].ToString();
-                        label9.Text= datainfo.Rows[0]["Id"].ToString();
+                        guna2DataGridView1.Visible = true;
+                        guna2DataGridView1.AutoResizeRows();
+                        guna2DataGridView1.DataSource = dt.ds.Tables["banbe"];
+                        guna2DataGridView1.Size = new Size(guna2DataGridView1.Width,
+                            (guna2DataGridView1.RowCount - 1) * guna2DataGridView1.RowTemplate.Height);
                     }    
                 }
             }
@@ -106,17 +104,46 @@ namespace bunifu
             //chuyển đổi dữ liệu và lưu lại kết quả 
             return formatter.Deserialize(stream);
         }
-        private void guna2Button1_Click(object sender, EventArgs e)
+        private void guna2TextBox1_TextChanged(object sender, EventArgs e)
         {
-
+            string temp;
+            temp = guna2TextBox1.Text;
+            if (temp == "")
+            {
+                guna2DataGridView1.Visible = false;
+            }
         }
-        public void AddId(string id)
+        public void Setfriend(DataTable dataTable)
+        {           
+            foreach (DataRow row in dataTable.Rows)
+            {
+                string s = row["Ten"].ToString();
+                string id = row["Id"].ToString();
+                if (s!="")
+                {
+                    Banbe banbe = new Banbe();
+                    banbe.Addten(s,id);
+                    banbe.Dock = DockStyle.Top;
+                    panel3.Controls.Add(banbe);
+                }    
+                
+            }            
+        }
+
+        private void guna2TextBox1_KeyDown(object sender, KeyEventArgs e)
         {
-            Connect();
-            data dt = new data();
-            dt.id_send =int.Parse(id);
-            dt.style = 8;
-            Send(dt);
+            if (e.KeyCode == Keys.Enter)
+            {
+                Connect();
+                string temp;
+                temp = guna2TextBox1.Text;
+                if (temp == "all")
+                    temp = "";
+                data dt = new data();
+                dt.style = 7;
+                dt.msg = temp;
+                Send(dt);
+            }   
         }
     }
 }

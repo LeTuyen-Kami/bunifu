@@ -33,20 +33,21 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(none));
             this.guna2GradientPanel1 = new Guna.UI2.WinForms.Guna2GradientPanel();
+            this.panel2 = new System.Windows.Forms.Panel();
             this.panel3 = new System.Windows.Forms.Panel();
             this.guna2Button3 = new Guna.UI2.WinForms.Guna2Button();
             this.guna2DataGridView1 = new Guna.UI2.WinForms.Guna2DataGridView();
-            this.guna2TextBox1 = new Guna.UI2.WinForms.Guna2TextBox();
-            this.panel2 = new System.Windows.Forms.Panel();
-            this.guna2Button2 = new Guna.UI2.WinForms.Guna2Button();
-            this.guna2Button1 = new Guna.UI2.WinForms.Guna2Button();
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel4 = new System.Windows.Forms.Panel();
+            this.guna2TextBox1 = new Guna.UI2.WinForms.Guna2TextBox();
+            this.guna2Button4 = new Guna.UI2.WinForms.Guna2Button();
             this.guna2CirclePictureBox1 = new Guna.UI2.WinForms.Guna2CirclePictureBox();
+            this.guna2Button2 = new Guna.UI2.WinForms.Guna2Button();
+            this.guna2Button1 = new Guna.UI2.WinForms.Guna2Button();
             this.guna2GradientPanel1.SuspendLayout();
+            this.panel2.SuspendLayout();
             this.panel3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.guna2DataGridView1)).BeginInit();
-            this.panel2.SuspendLayout();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.guna2CirclePictureBox1)).BeginInit();
             this.SuspendLayout();
@@ -60,6 +61,21 @@
             this.guna2GradientPanel1.ShadowDecoration.Parent = this.guna2GradientPanel1;
             this.guna2GradientPanel1.Size = new System.Drawing.Size(57, 584);
             this.guna2GradientPanel1.TabIndex = 2;
+            // 
+            // panel2
+            // 
+            this.panel2.Controls.Add(this.guna2Button4);
+            this.panel2.Controls.Add(this.guna2CirclePictureBox1);
+            this.panel2.Controls.Add(this.guna2Button2);
+            this.panel2.Controls.Add(this.guna2Button1);
+            this.panel2.Dock = System.Windows.Forms.DockStyle.Left;
+            this.panel2.Location = new System.Drawing.Point(0, 0);
+            this.panel2.MaximumSize = new System.Drawing.Size(194, 584);
+            this.panel2.MinimumSize = new System.Drawing.Size(57, 584);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(194, 584);
+            this.panel2.TabIndex = 0;
+            this.panel2.MouseLeave += new System.EventHandler(this.panel2_MouseLeave);
             // 
             // panel3
             // 
@@ -160,6 +176,24 @@
             this.guna2DataGridView1.ThemeStyle.RowsStyle.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(69)))), ((int)(((byte)(94)))));
             this.guna2DataGridView1.Visible = false;
             // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.panel4);
+            this.panel1.Controls.Add(this.panel3);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel1.Location = new System.Drawing.Point(57, 0);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(1044, 584);
+            this.panel1.TabIndex = 5;
+            // 
+            // panel4
+            // 
+            this.panel4.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel4.Location = new System.Drawing.Point(173, 0);
+            this.panel4.Name = "panel4";
+            this.panel4.Size = new System.Drawing.Size(871, 584);
+            this.panel4.TabIndex = 9;
+            // 
             // guna2TextBox1
             // 
             this.guna2TextBox1.AcceptsReturn = true;
@@ -190,19 +224,37 @@
             this.guna2TextBox1.TextChanged += new System.EventHandler(this.guna2TextBox1_TextChanged);
             this.guna2TextBox1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.guna2TextBox1_KeyDown);
             // 
-            // panel2
+            // guna2Button4
             // 
-            this.panel2.Controls.Add(this.guna2CirclePictureBox1);
-            this.panel2.Controls.Add(this.guna2Button2);
-            this.panel2.Controls.Add(this.guna2Button1);
-            this.panel2.Dock = System.Windows.Forms.DockStyle.Left;
-            this.panel2.Location = new System.Drawing.Point(0, 0);
-            this.panel2.MaximumSize = new System.Drawing.Size(194, 584);
-            this.panel2.MinimumSize = new System.Drawing.Size(57, 584);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(57, 584);
-            this.panel2.TabIndex = 0;
-            this.panel2.MouseLeave += new System.EventHandler(this.panel2_MouseLeave);
+            this.guna2Button4.CheckedState.Parent = this.guna2Button4;
+            this.guna2Button4.CustomImages.Parent = this.guna2Button4;
+            this.guna2Button4.DisabledState.Parent = this.guna2Button4;
+            this.guna2Button4.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.guna2Button4.ForeColor = System.Drawing.Color.White;
+            this.guna2Button4.HoverState.Parent = this.guna2Button4;
+            this.guna2Button4.Image = global::bunifu.Properties.Resources.friends__1_;
+            this.guna2Button4.ImageAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.guna2Button4.ImageOffset = new System.Drawing.Point(10, 0);
+            this.guna2Button4.Location = new System.Drawing.Point(0, 146);
+            this.guna2Button4.Name = "guna2Button4";
+            this.guna2Button4.ShadowDecoration.Parent = this.guna2Button4;
+            this.guna2Button4.Size = new System.Drawing.Size(194, 45);
+            this.guna2Button4.TabIndex = 2;
+            this.guna2Button4.Text = "guna2Button4";
+            this.guna2Button4.TextOffset = new System.Drawing.Point(10, 0);
+            this.guna2Button4.Click += new System.EventHandler(this.guna2Button4_Click);
+            // 
+            // guna2CirclePictureBox1
+            // 
+            this.guna2CirclePictureBox1.ImageRotate = 0F;
+            this.guna2CirclePictureBox1.Location = new System.Drawing.Point(0, 0);
+            this.guna2CirclePictureBox1.Name = "guna2CirclePictureBox1";
+            this.guna2CirclePictureBox1.ShadowDecoration.Mode = Guna.UI2.WinForms.Enums.ShadowMode.Circle;
+            this.guna2CirclePictureBox1.ShadowDecoration.Parent = this.guna2CirclePictureBox1;
+            this.guna2CirclePictureBox1.Size = new System.Drawing.Size(57, 59);
+            this.guna2CirclePictureBox1.TabIndex = 0;
+            this.guna2CirclePictureBox1.TabStop = false;
+            this.guna2CirclePictureBox1.Click += new System.EventHandler(this.guna2CirclePictureBox1_Click);
             // 
             // guna2Button2
             // 
@@ -212,16 +264,17 @@
             this.guna2Button2.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.guna2Button2.ForeColor = System.Drawing.Color.White;
             this.guna2Button2.HoverState.Parent = this.guna2Button2;
-            this.guna2Button2.Image = global::bunifu.Properties.Resources.home;
+            this.guna2Button2.Image = global::bunifu.Properties.Resources.notification__1_;
             this.guna2Button2.ImageAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.guna2Button2.ImageOffset = new System.Drawing.Point(10, 0);
-            this.guna2Button2.Location = new System.Drawing.Point(0, 107);
+            this.guna2Button2.Location = new System.Drawing.Point(0, 101);
             this.guna2Button2.Name = "guna2Button2";
             this.guna2Button2.ShadowDecoration.Parent = this.guna2Button2;
             this.guna2Button2.Size = new System.Drawing.Size(194, 45);
             this.guna2Button2.TabIndex = 1;
             this.guna2Button2.Text = "guna2Button2";
             this.guna2Button2.TextOffset = new System.Drawing.Point(10, 0);
+            this.guna2Button2.Click += new System.EventHandler(this.guna2Button2_Click);
             // 
             // guna2Button1
             // 
@@ -241,36 +294,6 @@
             this.guna2Button1.TabIndex = 0;
             this.guna2Button1.Text = "guna2Button1";
             this.guna2Button1.TextOffset = new System.Drawing.Point(10, 0);
-            this.guna2Button1.Click += new System.EventHandler(this.guna2Button1_Click);
-            // 
-            // panel1
-            // 
-            this.panel1.Controls.Add(this.panel4);
-            this.panel1.Controls.Add(this.panel3);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel1.Location = new System.Drawing.Point(57, 0);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1044, 584);
-            this.panel1.TabIndex = 5;
-            // 
-            // panel4
-            // 
-            this.panel4.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel4.Location = new System.Drawing.Point(173, 0);
-            this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(871, 584);
-            this.panel4.TabIndex = 9;
-            // 
-            // guna2CirclePictureBox1
-            // 
-            this.guna2CirclePictureBox1.ImageRotate = 0F;
-            this.guna2CirclePictureBox1.Location = new System.Drawing.Point(0, 0);
-            this.guna2CirclePictureBox1.Name = "guna2CirclePictureBox1";
-            this.guna2CirclePictureBox1.ShadowDecoration.Mode = Guna.UI2.WinForms.Enums.ShadowMode.Circle;
-            this.guna2CirclePictureBox1.ShadowDecoration.Parent = this.guna2CirclePictureBox1;
-            this.guna2CirclePictureBox1.Size = new System.Drawing.Size(57, 59);
-            this.guna2CirclePictureBox1.TabIndex = 0;
-            this.guna2CirclePictureBox1.TabStop = false;
             // 
             // none
             // 
@@ -287,9 +310,9 @@
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.none_FormClosing);
             this.Load += new System.EventHandler(this.none_Load);
             this.guna2GradientPanel1.ResumeLayout(false);
+            this.panel2.ResumeLayout(false);
             this.panel3.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.guna2DataGridView1)).EndInit();
-            this.panel2.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.guna2CirclePictureBox1)).EndInit();
             this.ResumeLayout(false);
@@ -308,5 +331,6 @@
         private Guna.UI2.WinForms.Guna2Button guna2Button3;
         private System.Windows.Forms.Panel panel4;
         private Guna.UI2.WinForms.Guna2CirclePictureBox guna2CirclePictureBox1;
+        private Guna.UI2.WinForms.Guna2Button guna2Button4;
     }
 }
