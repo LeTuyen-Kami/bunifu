@@ -21,6 +21,9 @@ namespace bunifu
         IPEndPoint IP;
         Socket client;
         bool isconnect;
+        DataTable banbe_id = new DataTable();
+        DataTable data_b = new DataTable();
+        string Id_M;
         public Friend()
         {
             InitializeComponent();
@@ -69,17 +72,20 @@ namespace bunifu
                     data dt = (data)Deseriliaze(datat);
                     if (dt.style==111)
                     {
-                        guna2DataGridView1.Visible = true;
-                        guna2DataGridView1.AutoResizeRows();
+                        banbe_id = dt.ds.Tables["banbe_id"];
+                        if (guna2DataGridView1.Visible==false)
+                            guna2DataGridView1.Visible = true;
+                        //guna2DataGridView1.AutoResizeRows();
                         guna2DataGridView1.DataSource = dt.ds.Tables["banbe"];
                         guna2DataGridView1.Size = new Size(guna2DataGridView1.Width,
-                            (guna2DataGridView1.RowCount - 1) * guna2DataGridView1.RowTemplate.Height);
-                    }    
+                            (guna2DataGridView1.RowCount - 1) * guna2DataGridView1.RowTemplate.Height+5);
+                    }  
+   
                 }
             }
             catch
             {
-                close();
+                //close();
             }
         }
         byte[] Serialize(object obj)
@@ -113,8 +119,11 @@ namespace bunifu
                 guna2DataGridView1.Visible = false;
             }
         }
-        public void Setfriend(DataTable dataTable)
-        {           
+        public void Setfriend(DataTable dataTable,string Id)
+        {
+            Id_M = Id;
+            int i = 0;
+            data_b = dataTable;
             foreach (DataRow row in dataTable.Rows)
             {
                 string s = row["Ten"].ToString();
@@ -125,25 +134,45 @@ namespace bunifu
                     banbe.Addten(s,id);
                     banbe.Dock = DockStyle.Top;
                     panel3.Controls.Add(banbe);
-                }    
-                
+                    i++;
+                }
             }            
         }
-
+        public bool check(string Id)
+        {
+            foreach (DataRow row in data_b.Rows)
+            {
+                string id = row["Id"].ToString();
+                if (id == Id)
+                    return true;
+            }
+            return false;
+        }
         private void guna2TextBox1_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
             {
+                e.SuppressKeyPress = true;
                 Connect();
                 string temp;
-                temp = guna2TextBox1.Text;
+                temp = guna2TextBox1.Text;              
                 if (temp == "all")
                     temp = "";
                 data dt = new data();
                 dt.style = 7;
+                dt.id_send = int.Parse(Id_M);
                 dt.msg = temp;
                 Send(dt);
             }   
+        }
+
+        private void guna2DataGridView1_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            //bunifuTextBox1.Text = bunifuDataGridView1[e.ColumnIndex, e.RowIndex].Value.ToString();
+            //bunifuDataGridView1.Visible = false;
+            none no = (none)(this.ParentForm);
+            string s = banbe_id.Rows[e.RowIndex][1].ToString();
+            no.addcontrols(s,1);
         }
     }
 }

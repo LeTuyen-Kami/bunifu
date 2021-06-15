@@ -32,6 +32,7 @@ namespace bunifu
         DataTable dataTable2 = new DataTable();
         DataTable datafriend = new DataTable();
         string Id_M = "1";
+        bool EnableA=true;
         public none()
         {
             InitializeComponent();
@@ -87,21 +88,50 @@ namespace bunifu
                     data message = (data)Deseriliaze(data);
                     if (message.style == 1)
                     {
-                        if (message.id_recv.ToString() == Id_M)
-                            message.id_recv = message.id_send;
-                        this.BeginInvoke((MethodInvoker)delegate ()
+                        if (message.id_recv.ToString()==Id_M)
                         {
-                            Guna2Button button = new Guna2Button();
-                            button.Location = but_old.Location;
-                            button.Size = guna2Button3.Size;
-                            //button.Dock = DockStyle.Top;
-                            button.Top = but_old.Bottom;
-                            button.Text = message.id_recv.ToString();
-                            button.Click += new EventHandler(guna2Button3_Click);
-                            panel3.Controls.Add(button);
-                            but_old = button;
-                        });
-                    }   
+                            DataSet ds = message.ds;
+                            guna2Button2.Image = new Bitmap(@"D:\Lập trình mạng\bunifu\notification.png");
+                            dataTable2 = ds.Tables["ketban"];
+                        }
+
+                        //if (message.id_recv.ToString() == Id_M)
+                        //    message.id_recv = message.id_send;
+                        //this.BeginInvoke((MethodInvoker)delegate ()
+                        //{
+                        //    Guna2Button button = new Guna2Button();
+                        //    button.Location = but_old.Location;
+                        //    button.Size = guna2Button3.Size;
+                        //    //button.Dock = DockStyle.Top;
+                        //    button.Top = but_old.Bottom;
+                        //    button.Text = message.id_recv.ToString();
+                        //    button.Click += new EventHandler(guna2Button3_Click);
+                        //    panel3.Controls.Add(button);
+                        //    but_old = button;
+                        //});
+                    }  
+                    if (message.style==2)
+                    {
+                        DataSet ds = message.ds;
+                        if (message.id_send.ToString()==Id_M)
+                        {
+                            dataTable2 = ds.Tables["ketban1"];
+                        }  
+                        if (message.id_recv.ToString()==Id_M)
+                        {
+                            guna2Button2.Image = new Bitmap(@"D:\Lập trình mạng\bunifu\notification.png");
+                            datafriend = ds.Tables["ban"];
+                            dataTable2 = ds.Tables["ketban2"];
+                        }    
+                    } 
+                    if (message.style==3)
+                    {
+                        if (message.id_send.ToString()==Id_M)
+                        {
+                            DataSet ds = message.ds;
+                            datafriend = ds.Tables["ban"];
+                        }    
+                    }    
                     if (message.style == 10)
                     {
                         DataSet ds = message.ds;
@@ -161,9 +191,10 @@ namespace bunifu
                     }
                 }
             }
-            catch
+            catch(Exception e)
             {
-                close();
+                //MessageBox.Show(e.Message);
+                //close();
             }
         }
         byte[] Serialize(object obj)
@@ -203,7 +234,7 @@ namespace bunifu
         }
         public void recvdata(DataTable dataTable)
         {
-            dataTable2 = dataTable;
+            dataTable1 = dataTable;
         }
         private void bunifuImageButton2_MouseHover(object sender, EventArgs e)
         {
@@ -402,22 +433,53 @@ namespace bunifu
         {
             guna2CirclePictureBox1.Image = image;
         }
-
+        public void unfriend(string id)
+        {
+            int i = 0;
+            foreach(DataRow row in datafriend.Rows)
+            {
+                if (row["Id"].ToString() == id)
+                {
+                    datafriend.Rows.RemoveAt(i);
+                    return;
+                }
+                i++;
+            }    
+        }
+        public void addrow_datafriend(string ten,int id)
+        {
+            datafriend.Rows.Add(new object[] {ten,id});
+        }
         private void guna2Button4_Click(object sender, EventArgs e)
         {
             Friend friend = new Friend();
-            friend.Setfriend(datafriend);
+            friend.Setfriend(datafriend,Id_M);
             panel1.Controls.Add(friend);
             friend.Dock = DockStyle.Fill;
             friend.BringToFront();
+
         }
-        public void addcontrols(string id)
+        public void addcontrols(string id,int a)
         {
             Info info = new Info();
-            info.AddId(id);
+            info.AddId(id,a,Id_M,EnableA);
             panel1.Controls.Add(info);
             info.Dock = DockStyle.Fill;
             info.BringToFront();
+        }
+        public void setenanle(bool enable)
+        {
+            EnableA = enable;
+        }
+        public void UpdateKetban(string id1)
+        {
+            foreach (DataRow row in dataTable2.Rows)
+            {
+                if (row["Nguoigui"].ToString()==id1)
+                {
+                    row["Status"] = "Refuse";
+                }    
+            }    
         }
     }
 }

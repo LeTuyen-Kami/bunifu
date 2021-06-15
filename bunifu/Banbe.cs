@@ -22,11 +22,16 @@ namespace bunifu
             guna2Button1.Text = s;
             id = Id;
         }
-
+        public void Esclip()
+        {
+            guna2Button1.AutoRoundedCorners = true;
+            guna2Button1.CustomizableEdges.TopLeft = false;
+            guna2Button1.CustomizableEdges.TopRight = false;
+        }
         private void guna2Button1_Click(object sender, EventArgs e)
         {
             none no = (none)(this.ParentForm);
-            no.addcontrols(id);
+            no.addcontrols(id,0);
         }
     }
 }

@@ -46,7 +46,7 @@
             this.lsvMessage.HideSelection = false;
             this.lsvMessage.Location = new System.Drawing.Point(50, 44);
             this.lsvMessage.Name = "lsvMessage";
-            this.lsvMessage.Size = new System.Drawing.Size(508, 257);
+            this.lsvMessage.Size = new System.Drawing.Size(541, 243);
             this.lsvMessage.TabIndex = 1;
             this.lsvMessage.UseCompatibleStateImageBehavior = false;
             // 
@@ -74,7 +74,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(800, 530);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.lsvMessage);

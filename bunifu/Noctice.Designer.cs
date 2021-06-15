@@ -74,6 +74,7 @@
             this.guna2Button1.Size = new System.Drawing.Size(107, 39);
             this.guna2Button1.TabIndex = 2;
             this.guna2Button1.Text = "Chấp nhận";
+            this.guna2Button1.Click += new System.EventHandler(this.guna2Button1_Click);
             // 
             // guna2Button2
             // 
@@ -94,6 +95,7 @@
             this.guna2Button2.Size = new System.Drawing.Size(107, 39);
             this.guna2Button2.TabIndex = 3;
             this.guna2Button2.Text = "Từ chối";
+            this.guna2Button2.Click += new System.EventHandler(this.guna2Button2_Click);
             // 
             // Noctice
             // 

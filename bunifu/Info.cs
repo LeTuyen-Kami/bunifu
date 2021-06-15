@@ -20,6 +20,9 @@ namespace bunifu
         IPEndPoint IP;
         Socket client;
         bool isconnect;
+        int phanloai;
+        string id_ban;
+        string my_id;
         public Info()
         {
             InitializeComponent();
@@ -68,6 +71,10 @@ namespace bunifu
                     data dt = (data)Deseriliaze(datat);
                     if (dt.style==100)
                     {
+                        if (phanloai == 1)
+                            guna2Button2.Visible = false;
+                        if (phanloai == 0)
+                            guna2Button1.Visible = false;
                         DataTable datainfo = new DataTable();
                         datainfo = dt.ds.Tables["Info"];
                         MemoryStream mem = new MemoryStream((byte[])datainfo.Rows[0]["Img"]);
@@ -81,7 +88,7 @@ namespace bunifu
             }
             catch
             {
-                close();
+                //close();
             }
         }
         byte[] Serialize(object obj)
@@ -108,15 +115,44 @@ namespace bunifu
         }
         private void guna2Button1_Click(object sender, EventArgs e)
         {
-
+            data dt = new data();
+            dt.style = 9;
+            dt.id_send =int.Parse(my_id);
+            dt.id_recv = int.Parse(id_ban);
+            Send(dt);
+            guna2Button1.Visible = false;
+            none no = (none)(this.ParentForm);
+            no.setenanle(false);
+            label5.Visible = true;
+            label5.Text = "Sent friend request";
         }
-        public void AddId(string id)
+        public void AddId(string id,int a,string myid,bool enable)
         {
+            my_id = myid;
+            id_ban = id;
+            phanloai = a;
             Connect();
             data dt = new data();
             dt.id_send =int.Parse(id);
             dt.style = 8;
             Send(dt);
+            if (phanloai == 1)
+            {
+                guna2Button1.Visible = false;
+            }
+        }
+
+        private void guna2Button2_Click(object sender, EventArgs e)
+        {
+            guna2Button2.Enabled = false;
+            data dt = new data();
+            dt.style = 12;
+            dt.id_send =int.Parse(my_id);
+            dt.id_recv =int.Parse(id_ban);
+            Send(dt);
+            none no = (none)(this.ParentForm);
+            no.unfriend(id_ban);
+            this.close();
         }
     }
 }

@@ -41,6 +41,7 @@
             this.noctice1.Size = new System.Drawing.Size(871, 93);
             this.noctice1.TabIndex = 0;
             this.noctice1.Visible = false;
+            this.noctice1.Load += new System.EventHandler(this.noctice1_Load);
             // 
             // Setnotice
             // 

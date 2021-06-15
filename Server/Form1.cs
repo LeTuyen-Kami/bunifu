@@ -130,6 +130,7 @@ namespace Server
                     //chuyển data từ dạng byte sang dạng string
                     data message = (data)Deseriliaze(datat);
                     AddMessage(message.style.ToString());
+                    //Thêm tin nhắn vào csdl
                     if (message.style == 0)
                     {
                         Create_Connect();
@@ -155,6 +156,7 @@ namespace Server
                         });
 
                     }
+                    //Đăng nhập
                     if (message.style == 1)
                     {
                         Create_Connect();
@@ -175,6 +177,7 @@ namespace Server
                         strConnect.Close();
                         //strConnect.Dispose();
                     }
+                    //Tạo tài khoản
                     if (message.style == 2)
                     {
                         if (check(message.tk,message.ten))
@@ -204,7 +207,7 @@ namespace Server
                             //strConnect.Dispose();
                         }
                     }
-
+                    //Lấy danh sách bạn,danh sách kết bạn và thông tin tài khoản đăng nhập
                     if (message.style == 3)
                     {
                         data dt = new data();
@@ -224,6 +227,7 @@ namespace Server
                         client.Send(Serialize(dt));
                         strConnect.Close();
                     }
+                    //Thêm bạn vào danh sách bạn
                     if (message.style==4)
                     {
                         Create_Connect();
@@ -250,6 +254,7 @@ namespace Server
                             }
                         });
                     }
+                    //update tài khoản,thay đỗi thông tin
                     if (message.style == 5)
                     {
                         data dt = new data();
@@ -268,6 +273,7 @@ namespace Server
                         cmd.ExecuteNonQuery();
                         strConnect.Close();
                     }
+                    //Thêm trạng thái vào danh sách kết bạn
                     if (message.style==6)
                     {
                         Create_Connect();
@@ -280,19 +286,38 @@ namespace Server
                         cmd.ExecuteNonQuery();
                         strConnect.Close();
                     }
+                    //Lấy tên,id của những người chưa có trong danh sách bạn và danh sách kết bạn
                     if (message.style == 7)
                     {
                         data dt = new data();
                         DataSet ds = new DataSet();
                         Create_Connect();
-                        string sql = "select Ten from Account where Id LIKE '" + message.msg + "' + '%'";
+                        string sql = "select Account.Ten,Account.Id " +
+                            "from Account " +
+                            "where Ten like '" + message.msg + "%' " +
+                            "and Account.Id<>'"+message.id_send+"'"+
+                            "and (Account.Id not in (select Friend.Id_N from Friend,Account where '" + message.id_send + "'=Friend.Id_M and Account.Id=Friend.Id_N)) " +
+                            "and (Account.Id not in (select Friend.Id_M from Friend,Account where '" + message.id_send + "'=Friend.Id_N and Account.Id=Friend.Id_M))" +
+                            "and (Account.Id not in (select Ketban.Nguoigui from Ketban,Account where '" + message.id_send + "'=Ketban.Nguoinhan and Account.Id=Ketban.Nguoinhan and Ketban.Status='Wait'))" +
+                            "and (Account.Id not in (select Ketban.Nguoinhan from Ketban, Account where '" + message.id_send + "' = Ketban.Nguoigui and Account.Id = Ketban.Nguoigui and Ketban.Status='Wait'))";
                         SqlDataAdapter adapter = new SqlDataAdapter(sql, strConnect);
+                        adapter.Fill(ds, "banbe_id");
+                        sql = "select Account.Ten " +
+                            "from Account " +
+                            "where Ten like '"+message.msg+"%' " +
+                            "and Account.Id<>'" + message.id_send + "'" +
+                            "and (Account.Id not in (select Friend.Id_N from Friend,Account where '" + message.id_send + "'=Friend.Id_M and Account.Id=Friend.Id_N)) " +
+                            "and (Account.Id not in (select Friend.Id_M from Friend,Account where '" + message.id_send + "'=Friend.Id_N and Account.Id=Friend.Id_M))" +
+                            "and (Account.Id not in (select Ketban.Nguoigui from Ketban,Account where '" + message.id_send + "'=Ketban.Nguoinhan and Account.Id=Ketban.Nguoinhan and Ketban.Status='Wait'))" +
+                            "and (Account.Id not in (select Ketban.Nguoinhan from Ketban, Account where '" + message.id_send + "' = Ketban.Nguoigui and Account.Id = Ketban.Nguoigui and Ketban.Status='Wait'))";
+                        adapter.SelectCommand.CommandText = sql;
                         adapter.Fill(ds, "banbe");
                         dt.ds = ds;
                         dt.style = 111;
                         client.Send(Serialize(dt));
                         strConnect.Close();
                     } 
+                    //Lấy thông tin trong bảng account
                     if (message.style==8)
                     {
                         data dt = new data();
@@ -305,11 +330,127 @@ namespace Server
                         dt.style = 100;
                         client.Send(Serialize(dt));
                         strConnect.Close();
+                    } 
+                    //Chức năng thêm bạn, lấy danh sách kết bạn
+                    if (message.style==9)
+                    {
+                        data dt = new data();
+                        dt.style = 1;
+                        DataSet ds = new DataSet();
+                        Create_Connect();
+                        string sql = "insert into Ketban (Nguoigui,Nguoinhan,Status,Readed) values(@ng,@nn,@s,@r)";
+                        SqlCommand cmd = strConnect.CreateCommand();
+                        cmd.CommandText = sql;
+                        cmd.Parameters.Add("@ng", SqlDbType.Int).Value = message.id_send;
+                        cmd.Parameters.Add("@nn", SqlDbType.Int).Value = message.id_recv;
+                        cmd.Parameters.Add("@s", SqlDbType.NVarChar).Value = "Wait";
+                        cmd.Parameters.Add("@r", SqlDbType.Int).Value = 0;
+                        cmd.ExecuteNonQuery();
+                        sql = "select Ketban.Status,Ketban.Nguoigui,Ketban.Nguoinhan,Account.Ten,Ketban.Readed from Account,Ketban where Ketban.Nguoinhan='" + message.id_recv + "'and Ketban.Nguoigui=Account.Id or Ketban.Nguoigui='" + message.id_send + "' and Ketban.Nguoinhan=Account.Id and Ketban.Status='Accept'";
+                        SqlDataAdapter adapter = new SqlDataAdapter(sql, strConnect);
+                        adapter.Fill(ds, "ketban");
+                        dt.ds = ds;
+                        dt.id_recv = message.id_recv;
+                        strConnect.Close();
+                        this.BeginInvoke((MethodInvoker)delegate ()
+                        {
+                            foreach (Socket item in clientList)
+                            {
+                                if (item != null)
+                                {
+                                    item.Send(Serialize(dt));
+                                }
+                            }
+                        });
+                    }  
+                    //Chấp nhận kết bạn
+                    if (message.style==10)
+                    {
+                        data dt = new data();
+                        DataSet ds = new DataSet();
+                        dt.style = 2;
+                        Create_Connect();
+                        string sql = "Insert into Friend(Id_M,Id_N) values(@m,@n)";
+                        SqlCommand cmd = new SqlCommand(sql, strConnect);
+                        cmd.Parameters.Add("@m", SqlDbType.Int).Value = message.id_recv;
+                        cmd.Parameters.Add("@n", SqlDbType.Int).Value = message.id_send;
+                        cmd.ExecuteNonQuery();
+                        sql = "Update Ketban set Status=@s,Readed=@r where Nguoigui=@ng and Nguoinhan=@nn";
+                        cmd.CommandText = sql;
+                        cmd.Parameters.Add("@s", SqlDbType.NVarChar).Value = "Accept";
+                        cmd.Parameters.Add("@r", SqlDbType.Int).Value = 0;
+                        cmd.Parameters.Add("@ng", SqlDbType.Int).Value = message.id_send;
+                        cmd.Parameters.Add("@nn", SqlDbType.Int).Value = message.id_recv;
+                        cmd.ExecuteNonQuery();
+                        Thread.Sleep(500);
+
+                        sql = "select Ketban.Status,Ketban.Nguoigui,Ketban.Nguoinhan,Account.Ten,Ketban.Readed from Account,Ketban where Ketban.Nguoinhan='" + message.id_recv + "'and Ketban.Nguoigui=Account.Id or Ketban.Nguoigui='" + message.id_recv + "' and Ketban.Nguoinhan=Account.Id and Ketban.Status='Accept'";
+                        SqlDataAdapter adapter = new SqlDataAdapter(sql, strConnect);
+                        adapter.Fill(ds, "ketban1");
+                        sql = "select Ketban.Status,Ketban.Nguoigui,Ketban.Nguoinhan,Account.Ten,Ketban.Readed from Account,Ketban where Ketban.Nguoinhan='" + message.id_send + "'and Ketban.Nguoigui=Account.Id or Ketban.Nguoigui='" + message.id_send + "' and Ketban.Nguoinhan=Account.Id and Ketban.Status='Accept'";
+                        adapter.SelectCommand.CommandText = sql;
+                        adapter.Fill(ds, "ketban2");
+                        sql = "select Account.Ten,Account.Id from Account,Friend where Friend.Id_M='" + message.id_send + "' and Friend.Id_N=Account.Id or Friend.Id_N='" + message.id_send + "' and Friend.Id_M=Account.Id";
+                        adapter.SelectCommand.CommandText =sql;
+                        adapter.Fill(ds,"ban");
+                        strConnect.Close();
+                        dt.ds = ds;
+                        dt.id_recv = message.id_send;
+                        dt.id_send = message.id_recv;
+                        this.BeginInvoke((MethodInvoker)delegate ()
+                        {
+                            foreach (Socket item in clientList)
+                            {
+                                if (item != null)
+                                {
+                                    item.Send(Serialize(dt));
+                                }
+                            }
+                        });
+                    }
+                    //Từ chối kết bạn
+                    if (message.style==11)
+                    {
+                        Create_Connect();
+                        string sql = "Update Ketban set Status=@s where Nguoigui=@ng";
+                        SqlCommand cmd = new SqlCommand(sql,strConnect);
+                        cmd.Parameters.Add("@s", SqlDbType.NVarChar).Value = "Refuse";
+                        cmd.Parameters.Add("@ng", SqlDbType.Int).Value = message.id_send;
+                        cmd.ExecuteNonQuery();
+                        strConnect.Close();
+                    } 
+                    //xoá bạn
+                    if (message.style==12)
+                    {
+                        data dt = new data();
+                        DataSet ds = new DataSet();
+                        dt.style = 3;
+                        dt.id_send = message.id_send;
+                        Create_Connect();
+                        string sql = "Delete from Friend where (Id_M='"+message.id_recv+"' and Id_N='"+message.id_send+"') " +
+                            "or (Id_N='" + message.id_recv + "' and Id_M='" + message.id_send + "')";
+                        SqlCommand cmd = new SqlCommand(sql, strConnect);
+                        cmd.ExecuteNonQuery();
+                        sql = "select Account.Ten,Account.Id from Account,Friend where Friend.Id_M='" + message.id_send + "' and Friend.Id_N=Account.Id or Friend.Id_N='" + message.id_send + "' and Friend.Id_M=Account.Id";
+                        SqlDataAdapter adapter = new SqlDataAdapter(sql, strConnect);
+                        adapter.Fill(ds, "ban");
+                        strConnect.Close();
+                        this.BeginInvoke((MethodInvoker)delegate ()
+                        {
+                            foreach (Socket item in clientList)
+                            {
+                                if (item != null)
+                                {
+                                    item.Send(Serialize(dt));
+                                }
+                            }
+                        });
                     }    
                 }
             }
-            catch
+            catch (Exception e)
             {
+                //MessageBox.Show(e.Message);
                 clientList.Remove(client);
                 client.Close();
             }
@@ -364,7 +505,7 @@ namespace Server
         private void button2_Click(object sender, EventArgs e)
         {
             Connect();
-            
+            button2.Enabled = false;
         }
     }
 }
