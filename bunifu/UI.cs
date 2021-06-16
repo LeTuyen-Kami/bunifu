@@ -33,11 +33,11 @@ namespace bunifu
         DataTable datafriend = new DataTable();
         string Id_M = "1";
         bool EnableA=true;
+        Danhsach_tinnhan danhsach = new Danhsach_tinnhan();
         public none()
         {
             InitializeComponent();
             CheckForIllegalCrossThreadCalls = false;//tránh việc đụng độ khi sử dụng tài nguyên giữa các thread
-            but_old.Location=guna2TextBox1.Location;
         }
         public void Id(string id)
         {
@@ -224,7 +224,8 @@ namespace bunifu
 
         }
         private void none_Load(object sender, EventArgs e)
-        {        
+        {
+            this.Size = new Size(1350, 740);
             Connect();
             data dt = new data();
             dt.style = 3;
@@ -248,41 +249,26 @@ namespace bunifu
         
         private void guna2TextBox1_TextChanged(object sender, EventArgs e)
         {
-            string temp;
-            temp = guna2TextBox1.Text;
-            if (temp=="")
-            {
-                guna2DataGridView1.Visible = false;
-            }
+            string temp="";
             
-            else
-            {
-                if (temp == "all")
-                    temp = "";
                 DataSet data = new DataSet();
                 string query = "select Ten from Account where Id LIKE '" + temp + "' + '%'";
-                using (SqlConnection sql = new SqlConnection
-                    ("Data Source=LAPTOP-EGRB430C\\SQLEXPRESS;Initial Catalog=ten;Integrated Security=True"))
-                {
-                    sql.Open();
-                    SqlDataAdapter adapter = new SqlDataAdapter(query, sql);
-                    adapter.Fill(data);
-                    guna2DataGridView1.Visible = true;
-                    guna2DataGridView1.AutoResizeRows();
-                    DataTable dt = data.Tables[0];
-                    guna2DataGridView1.DataSource = dt;
-                    guna2DataGridView1.Size = new Size(guna2DataGridView1.Width,
-                        guna2DataGridView1.RowCount * guna2DataGridView1.RowTemplate.Height);
-                    sql.Close();
-                }
-            }               
+            using (SqlConnection sql = new SqlConnection
+                ("Data Source=LAPTOP-EGRB430C\\SQLEXPRESS;Initial Catalog=ten;Integrated Security=True"))
+            {
+                sql.Open();
+                SqlDataAdapter adapter = new SqlDataAdapter(query, sql);
+                adapter.Fill(data);
+                DataTable dt = data.Tables[0];
+                sql.Close();
+            }
         }
         public void showchatbox(string s)
         {
             chat = new chatbox();
-            chat.Location = panel1.Location;
+            chat.Location = panel4.Location;
             chat.Dock = DockStyle.Fill;
-            chat.Size = panel1.Size;
+            chat.Size = panel4.Size;
             chat.IdM(Id_M);
             chat.IdN(s);
             Create_Connect();
@@ -305,7 +291,7 @@ namespace bunifu
                 }
             }
             strConnect.Close();
-            panel1.Controls.Add(chat);
+            panel4.Controls.Add(chat);
             chat.vertical();
             chat.BringToFront();
         }
@@ -330,9 +316,7 @@ namespace bunifu
                 data dt = new data();
                 dt.style = 4;
                 dt.id_send =int.Parse(Id_M);
-                dt.id_recv =int.Parse(guna2TextBox1.Text);
                 Send(dt);
-                guna2TextBox1.Text = "";
                 MessageBox.Show("Đã kêt bạn thành công", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
@@ -398,7 +382,7 @@ namespace bunifu
             Myinfo minfo = new Myinfo();
             minfo.RId(Id_M);
             minfo.Dock = DockStyle.Fill;
-            panel1.Controls.Add(minfo);
+            panel4.Controls.Add(minfo);
             minfo.BringToFront();
             minfo.datatable(dataTable1);
             
@@ -416,7 +400,7 @@ namespace bunifu
 
             Setnotice noctice = new Setnotice();
             noctice.set(dataTable2,Id_M);
-            panel1.Controls.Add(noctice);
+            panel4.Controls.Add(noctice);
             foreach (DataRow row in dataTable2.Rows)
             {
                 row["Readed"] = "1";
@@ -454,7 +438,7 @@ namespace bunifu
         {
             Friend friend = new Friend();
             friend.Setfriend(datafriend,Id_M);
-            panel1.Controls.Add(friend);
+            panel4.Controls.Add(friend);
             friend.Dock = DockStyle.Fill;
             friend.BringToFront();
 
@@ -463,7 +447,7 @@ namespace bunifu
         {
             Info info = new Info();
             info.AddId(id,a,Id_M,EnableA);
-            panel1.Controls.Add(info);
+            panel4.Controls.Add(info);
             info.Dock = DockStyle.Fill;
             info.BringToFront();
         }
@@ -480,6 +464,25 @@ namespace bunifu
                     row["Status"] = "Refuse";
                 }    
             }    
+        }
+
+        private void guna2Button1_Click(object sender, EventArgs e)
+        {
+            panel4.Controls.Add(danhsach);
+            danhsach.Dock = DockStyle.Left;
+            danhsach.BringToFront();
+        }
+
+        private void panel2_MouseHover(object sender, EventArgs e)
+        {
+            panel2.Size = panel2.MaximumSize;
+        }
+
+        private void guna2Button3_Click_1(object sender, EventArgs e)
+        {
+            Taonhom taonhom = new Taonhom();
+            taonhom.nhap(datafriend);
+            taonhom.ShowDialog();
         }
     }
 }

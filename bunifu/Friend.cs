@@ -133,7 +133,8 @@ namespace bunifu
                     Banbe banbe = new Banbe();
                     banbe.Addten(s,id);
                     banbe.Dock = DockStyle.Top;
-                    panel3.Controls.Add(banbe);
+                    flowLayoutPanel1.Controls.Add(banbe);
+                    
                     i++;
                 }
             }            
