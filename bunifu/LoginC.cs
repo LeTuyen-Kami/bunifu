@@ -204,5 +204,30 @@ namespace bunifu
 
             return Convert.ToBase64String(resultArray, 0, resultArray.Length);
         }
+
+        private void bunifuTextBox2_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode==Keys.Enter)
+            {
+                if (bunifuTextBox1.Text != "" && bunifuTextBox2.Text != "")
+                {
+                    try
+                    {
+                        Connect();
+                        data dt = new data();
+                        string tk = bunifuTextBox1.Text;
+                        string mk = Encrypt(bunifuTextBox2.Text);
+                        dt.tk = tk;
+                        dt.mk = mk;
+                        dt.style = 1;
+                        Send(dt);
+                        guna2Button1.Enabled = false;
+                    }
+                    catch { }
+                }
+                else
+                    MessageBox.Show("Vui lòng nhập tài khoản,mật khẩu", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }    
+        }
     }
 }

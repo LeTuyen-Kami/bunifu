@@ -120,7 +120,7 @@ namespace bunifu
             dt.id_send =int.Parse(my_id);
             dt.id_recv = int.Parse(id_ban);
             Send(dt);
-            guna2Button1.Visible = false;
+            guna2Button1.Enabled = false;
             none no = (none)(this.ParentForm);
             no.setenanle(false);
             label5.Visible = true;
@@ -136,10 +136,6 @@ namespace bunifu
             dt.id_send =int.Parse(id);
             dt.style = 8;
             Send(dt);
-            if (phanloai == 1)
-            {
-                guna2Button1.Visible = false;
-            }
         }
 
         private void guna2Button2_Click(object sender, EventArgs e)
@@ -150,9 +146,8 @@ namespace bunifu
             dt.id_send =int.Parse(my_id);
             dt.id_recv =int.Parse(id_ban);
             Send(dt);
-            none no = (none)(this.ParentForm);
-            no.unfriend(id_ban);
-            this.close();
+            //none no = (none)(this.ParentForm);
+            //no.unfriend(id_ban);
         }
     }
 }

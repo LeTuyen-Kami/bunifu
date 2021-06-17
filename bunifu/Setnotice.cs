@@ -18,37 +18,42 @@ namespace bunifu
         }
         public void set(DataTable dataTable,string id)
         {
-            foreach(DataRow row in dataTable.Rows)
+            for (int i=dataTable.Rows.Count-1;i>=0;i--)
             {
-                if (row["Nguoigui"].ToString()==id)
+                string value_row_nguoigui = dataTable.Rows[i]["Nguoigui"].ToString();
+                string value_row_nguoinhan = dataTable.Rows[i]["Nguoinhan"].ToString();
+                int value_readed = (int)dataTable.Rows[i]["Readed"];
+                string value_status = dataTable.Rows[i]["Status"].ToString();
+                string value_ten = dataTable.Rows[i]["Ten"].ToString();
+                if (value_row_nguoigui==id)
                 {
                     Noctice noctice = new Noctice();
-                    noctice.setid(row["Nguoigui"].ToString(), row["Nguoinhan"].ToString());
-                    noctice.Addnotice(row["Ten"].ToString(),", đã chấp nhận lời mời kết bạn" ,(int)row["Readed"],1);
+                    noctice.setid(value_row_nguoigui, value_row_nguoinhan);
+                    noctice.Addnotice(value_ten,", đã chấp nhận lời mời kết bạn" ,value_readed,1);
                     noctice.Size = noctice1.Size;
-                    noctice.Dock = DockStyle.Bottom;
+                    noctice.Dock = DockStyle.Top;
                     this.Controls.Add(noctice);
                     noctice.BringToFront();
                 }    
-                if (row["Nguoinhan"].ToString()==id)
+                if (value_row_nguoinhan==id)
                 {
                     Noctice noctice = new Noctice();
-                    noctice.ten(row["Ten"].ToString());
-                    noctice.setid(row["Nguoigui"].ToString(), row["Nguoinhan"].ToString());
-                    if (row["Status"].ToString()=="Wait")
+                    noctice.ten(value_ten);
+                    noctice.setid(value_row_nguoigui, value_row_nguoinhan);
+                    if (value_status=="Wait")
                     {
-                        noctice.Addnotice(row["Ten"].ToString(), ", đã gửi lời mời kết bạn", (int)row["Readed"], 0);
+                        noctice.Addnotice(value_ten, ", đã gửi lời mời kết bạn", value_readed,0);
                     }
-                    if (row["Status"].ToString()=="Accept")
+                    if (value_status=="Accept")
                     {
-                        noctice.Addnotice("Bạn", ", đã chấp nhận lời mời kết bạn của "+row["Ten"].ToString(), (int)row["Readed"], 1);
+                        noctice.Addnotice("Bạn", ", đã chấp nhận lời mời kết bạn của "+value_ten, value_readed,1);
                     }
-                    if (row["Status"].ToString() == "Refuse")
+                    if (value_status == "Refuse")
                     {
-                        noctice.Addnotice("Bạn", ", đã từ chối lời mời kết bạn của " + row["Ten"].ToString(), (int)row["Readed"], 1);
+                        noctice.Addnotice("Bạn", ", đã từ chối lời mời kết bạn của " + value_ten, value_readed,1);
                     }
                     noctice.Size = noctice1.Size;
-                    noctice.Dock = DockStyle.Bottom;
+                    noctice.Dock = DockStyle.Top;
                     this.Controls.Add(noctice);
                     noctice.BringToFront();
                 }    

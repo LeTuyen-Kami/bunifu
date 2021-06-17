@@ -34,9 +34,9 @@
             // noctice1
             // 
             this.noctice1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
-            this.noctice1.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.noctice1.Dock = System.Windows.Forms.DockStyle.Top;
             this.noctice1.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.noctice1.Location = new System.Drawing.Point(0, 491);
+            this.noctice1.Location = new System.Drawing.Point(0, 0);
             this.noctice1.Name = "noctice1";
             this.noctice1.Size = new System.Drawing.Size(871, 93);
             this.noctice1.TabIndex = 0;

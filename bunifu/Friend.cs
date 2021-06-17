@@ -128,10 +128,11 @@ namespace bunifu
             {
                 string s = row["Ten"].ToString();
                 string id = row["Id"].ToString();
+                byte[] img =(byte[])row["Img"];
                 if (s!="")
                 {
                     Banbe banbe = new Banbe();
-                    banbe.Addten(s,id);
+                    banbe.Addten(s,id,img,Id_M,1);
                     banbe.Dock = DockStyle.Top;
                     flowLayoutPanel1.Controls.Add(banbe);
                     

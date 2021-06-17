@@ -57,8 +57,8 @@ namespace bunifu
             dt.id_recv =int.Parse(Myid);
             dt.id_send =int.Parse(Yourid);
             client.Send(dt);
-            none no = (none)(this.ParentForm);
-            no.addrow_datafriend(label1.Text,int.Parse(Yourid));
+            // no = (none)(this.ParentForm);
+            //no.addrow_datafriend(label1.Text,int.Parse(Yourid));
             Addnotice("Bạn", ", đã chấp nhận lời mời kết bạn của "+name, 1, 1);
         }
         private void guna2Button2_Click(object sender, EventArgs e)

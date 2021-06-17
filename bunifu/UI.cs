@@ -22,10 +22,10 @@ namespace bunifu
 {
     public partial class none : Form
     {
-        chatbox chat;
         IPEndPoint IP;
         Socket client;
         bool isconnect;
+        DataTable data_nhom = new DataTable();
         int dem = 0;
         DateTime now = DateTime.Now;
         DataTable dataTable1 = new DataTable();
@@ -113,23 +113,41 @@ namespace bunifu
                     if (message.style==2)
                     {
                         DataSet ds = message.ds;
+                        
                         if (message.id_send.ToString()==Id_M)
                         {
                             dataTable2 = ds.Tables["ketban1"];
+                            datafriend = ds.Tables["ban2"];
                         }  
                         if (message.id_recv.ToString()==Id_M)
                         {
                             guna2Button2.Image = new Bitmap(@"D:\Lập trình mạng\bunifu\notification.png");
-                            datafriend = ds.Tables["ban"];
                             dataTable2 = ds.Tables["ketban2"];
+                            datafriend = ds.Tables["ban1"];
+
                         }    
                     } 
                     if (message.style==3)
                     {
+                        DataSet ds = message.ds;
+                        if (message.id_recv.ToString()==Id_M)
+                        {
+                            datafriend = ds.Tables["ban2"];
+                        }  
                         if (message.id_send.ToString()==Id_M)
                         {
-                            DataSet ds = message.ds;
-                            datafriend = ds.Tables["ban"];
+                            datafriend = ds.Tables["ban1"];
+                        }    
+                    }   
+                    if (message.style==4)
+                    {
+                        foreach (DataRow row in message.ds.Tables["Thanhvien"].Rows)
+                        {
+                            if (row["Id"].ToString()==Id_M)
+                            {
+                                data_nhom.Rows.Add(new object[] { message.id,message.ten });
+                                break;
+                            }    
                         }    
                     }    
                     if (message.style == 10)
@@ -137,40 +155,11 @@ namespace bunifu
                         DataSet ds = message.ds;
                         dataTable1 = ds.Tables["data"];
                         dataTable2 = ds.Tables["ketban"];
-
+                        data_nhom = ds.Tables["nhom"];
                         MemoryStream mem = new MemoryStream((byte[])dataTable1.Rows[0][4]);
                         guna2CirclePictureBox1.Image = Image.FromStream(mem);
                         guna2CirclePictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
                         datafriend = ds.Tables["ban"];
-                        //foreach (DataRow row in datafriend.Rows)
-                        //{
-                        //    foreach (DataColumn col in datafriend.Columns)
-                        //    {
-                        //        if (row[col].ToString() != Id_M)
-                        //        {
-                        //            if (dem == 0)
-                        //            {
-                        //                this.BeginInvoke((MethodInvoker)delegate ()
-                        //                {
-                        //                    showchatbox(row[col].ToString());
-                        //                });
-                        //                dem++;
-                        //            }
-                        //            this.BeginInvoke((MethodInvoker)delegate ()
-                        //            {
-                        //                Guna2Button button = new Guna2Button();
-                        //                button.Location = but_old.Location;
-                        //                button.Size = guna2Button3.Size;
-                        //                //button.Dock = DockStyle.Top;
-                        //                button.Top = but_old.Bottom;
-                        //                button.Text = row[col].ToString();
-                        //                button.Click += new EventHandler(guna2Button3_Click);
-                        //                panel3.Controls.Add(button);
-                        //                but_old = button;
-                        //            });
-                        //        }
-                        //    }
-                        //}
                         if (checkread(dataTable2))
                         {
                             guna2Button2.Image = new Bitmap(@"D:\Lập trình mạng\bunifu\notification.png");
@@ -178,16 +167,13 @@ namespace bunifu
                     }
                     if (message.style == 0)
                     {
-                        string s = now.Day.ToString() + "/" + now.Month + " " + now.Hour.ToString() + ":" + now.Minute.ToString() + ":" + now.Second.ToString();
                         this.BeginInvoke((MethodInvoker)delegate ()
                         {
-                            if (message.id_send.ToString() != Id_M)
+                            if (message.id_recv.ToString() == Id_M)
                             {
-                                message.msg = Decrypt(message.msg);
-                                chat.addinmessage(message.msg, s, buble.msgtype.In);
+                                danhsach.add_mes(message.msg);
                             }
                         });
-
                     }
                 }
             }
@@ -225,7 +211,7 @@ namespace bunifu
         }
         private void none_Load(object sender, EventArgs e)
         {
-            this.Size = new Size(1350, 740);
+            this.Size = new Size(1200, 740);
             Connect();
             data dt = new data();
             dt.style = 3;
@@ -237,16 +223,7 @@ namespace bunifu
         {
             dataTable1 = dataTable;
         }
-        private void bunifuImageButton2_MouseHover(object sender, EventArgs e)
-        {
-            panel2.Size = panel2.MaximumSize;
-        }
-        private void panel2_MouseLeave(object sender, EventArgs e)
-        {
-            panel2.Size = panel2.MinimumSize;
 
-        }
-        
         private void guna2TextBox1_TextChanged(object sender, EventArgs e)
         {
             string temp="";
@@ -262,44 +239,6 @@ namespace bunifu
                 DataTable dt = data.Tables[0];
                 sql.Close();
             }
-        }
-        public void showchatbox(string s)
-        {
-            chat = new chatbox();
-            chat.Location = panel4.Location;
-            chat.Dock = DockStyle.Fill;
-            chat.Size = panel4.Size;
-            chat.IdM(Id_M);
-            chat.IdN(s);
-            Create_Connect();
-            string sqll = "select * from Message where Id_S = '" + Id_M + "' and Id_R = '" + s + "' or Id_S = '" + s + "' and Id_R = '" + Id_M + "'";
-            SqlCommand cmd = new SqlCommand(sqll, strConnect);
-            SqlDataReader dta = cmd.ExecuteReader();
-            if (dta.HasRows)
-            {
-                while (dta.Read())
-                {
-                    string message =Decrypt(dta.GetString(3));
-                    string time = dta.GetString(4);
-                    int id = dta.GetInt32(1);
-                    if (id.ToString() == Id_M)
-                    {
-                        chat.addinmessage(message, time, buble.msgtype.Out);
-                    }
-                    else
-                        chat.addinmessage(message, time, buble.msgtype.In);
-                }
-            }
-            strConnect.Close();
-            panel4.Controls.Add(chat);
-            chat.vertical();
-            chat.BringToFront();
-        }
-        private void guna2Button3_Click(object sender, EventArgs e)
-        {
-            Guna2Button a = sender as Guna2Button;
-            string text = a.Text;
-            showchatbox(text);
         }
         SqlConnection strConnect = new SqlConnection();
         public void Create_Connect()
@@ -417,23 +356,19 @@ namespace bunifu
         {
             guna2CirclePictureBox1.Image = image;
         }
-        public void unfriend(string id)
-        {
-            int i = 0;
-            foreach(DataRow row in datafriend.Rows)
-            {
-                if (row["Id"].ToString() == id)
-                {
-                    datafriend.Rows.RemoveAt(i);
-                    return;
-                }
-                i++;
-            }    
-        }
-        public void addrow_datafriend(string ten,int id)
-        {
-            datafriend.Rows.Add(new object[] {ten,id});
-        }
+        //public void unfriend(string id)
+        //{
+        //    int i = 0;
+        //    foreach(DataRow row in datafriend.Rows)
+        //    {
+        //        if (row["Id"].ToString() == id)
+        //        {
+        //            datafriend.Rows.RemoveAt(i);
+        //            return;
+        //        }
+        //        i++;
+        //    }    
+        //}
         private void guna2Button4_Click(object sender, EventArgs e)
         {
             Friend friend = new Friend();
@@ -465,23 +400,18 @@ namespace bunifu
                 }    
             }    
         }
-
         private void guna2Button1_Click(object sender, EventArgs e)
         {
+            danhsach = new Danhsach_tinnhan();
             panel4.Controls.Add(danhsach);
-            danhsach.Dock = DockStyle.Left;
+            danhsach.nhap_data(datafriend,data_nhom, Id_M);
+            danhsach.Dock = DockStyle.Fill;
             danhsach.BringToFront();
         }
-
-        private void panel2_MouseHover(object sender, EventArgs e)
-        {
-            panel2.Size = panel2.MaximumSize;
-        }
-
         private void guna2Button3_Click_1(object sender, EventArgs e)
         {
             Taonhom taonhom = new Taonhom();
-            taonhom.nhap(datafriend);
+            taonhom.nhap(datafriend,Id_M);
             taonhom.ShowDialog();
         }
     }
