@@ -7,14 +7,34 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO;
 
 namespace bunifu
 {
     public partial class buble : UserControl
     {
+        byte[] Data_file;
         public buble()
         {
             InitializeComponent();
+        }
+        public buble(string s,string time,byte[] data)
+        {
+            InitializeComponent();
+            Data_file = data;
+            label1.Text = s;
+            lbltime.Text = time;
+            label1.Cursor = Cursors.Hand;
+            label1.Font = new Font(label1.Font.Name, 12, FontStyle.Underline);
+            label1.Click += new EventHandler(label_click);
+            setheight();
+        }
+        private void label_click(object sender,EventArgs e)
+        {
+            SaveFileDialog sfd = new SaveFileDialog();
+            sfd.FileName = label1.Text;
+            sfd.ShowDialog();
+            File.WriteAllBytes(sfd.FileName, Data_file);
         }
         public buble(Image img)
         {

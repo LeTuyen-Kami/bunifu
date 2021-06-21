@@ -28,7 +28,7 @@ namespace bunifu
         public bool isconnect;
         private void bunifuDataGridView1_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-            //bunifuTextBox1.Text = bunifuDataGridView1[e.ColumnIndex, e.RowIndex].Value.ToString();
+            //guna2TextBox1.Text = bunifuDataGridView1[e.ColumnIndex, e.RowIndex].Value.ToString();
             //bunifuDataGridView1.Visible = false;
         }
         int a = 1;
@@ -89,8 +89,8 @@ namespace bunifu
                             {
                                 MessageBox.Show("Tài khoản,mật khẩu không chính xác", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                                 guna2Button1.Enabled = true;
-                                bunifuTextBox1.Text = "";
-                                bunifuTextBox2.Text = "";
+                                guna2TextBox1.Text = "";
+                                guna2TextBox2.Text = "";
                             }
                         });
 
@@ -126,7 +126,7 @@ namespace bunifu
         private void LoginC_Load(object sender, EventArgs e)
         {
             //bunifuDataGridView1.Visible = false;
-            bunifuTextBox2.UseSystemPasswordChar = true;
+            guna2TextBox2.UseSystemPasswordChar = true;
         }
         private void bunifuImageButton1_Click_1(object sender, EventArgs e)
         {
@@ -134,12 +134,12 @@ namespace bunifu
             if (a == 1)
             {
                 a = 2;
-                bunifuTextBox2.UseSystemPasswordChar = true;
+                guna2TextBox2.UseSystemPasswordChar = false;
             }
             else
             {
                 a = 1;
-                bunifuTextBox2.UseSystemPasswordChar = false;
+                guna2TextBox2.UseSystemPasswordChar = true;
             }
         }
 
@@ -160,14 +160,14 @@ namespace bunifu
 
         private void guna2Button1_Click(object sender, EventArgs e)
         {
-            if (bunifuTextBox1.Text != "" && bunifuTextBox2.Text != "")
+            if (guna2TextBox1.Text != "" && guna2TextBox2.Text != "")
             {
                 try
                 {
                     Connect();
                     data dt = new data();
-                    string tk = bunifuTextBox1.Text;
-                    string mk = Encrypt(bunifuTextBox2.Text);
+                    string tk = guna2TextBox1.Text;
+                    string mk = Encrypt(guna2TextBox2.Text);
                     dt.tk = tk;
                     dt.mk = mk;
                     dt.style = 1;
@@ -204,19 +204,19 @@ namespace bunifu
 
             return Convert.ToBase64String(resultArray, 0, resultArray.Length);
         }
-
-        private void bunifuTextBox2_KeyDown(object sender, KeyEventArgs e)
+       
+        private void guna2TextBox2_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode==Keys.Enter)
+            if (e.KeyCode == Keys.Enter)
             {
-                if (bunifuTextBox1.Text != "" && bunifuTextBox2.Text != "")
+                if (guna2TextBox1.Text != "" && guna2TextBox2.Text != "")
                 {
                     try
                     {
                         Connect();
                         data dt = new data();
-                        string tk = bunifuTextBox1.Text;
-                        string mk = Encrypt(bunifuTextBox2.Text);
+                        string tk = guna2TextBox1.Text;
+                        string mk = Encrypt(guna2TextBox2.Text);
                         dt.tk = tk;
                         dt.mk = mk;
                         dt.style = 1;
@@ -227,7 +227,7 @@ namespace bunifu
                 }
                 else
                     MessageBox.Show("Vui lòng nhập tài khoản,mật khẩu", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }    
+            }
         }
     }
 }

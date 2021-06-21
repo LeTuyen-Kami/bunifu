@@ -33,7 +33,7 @@ namespace bunifu
         }
 
         buble bb_old = new buble();
-        public void addinmessage(string message, string time, buble.msgtype a, int width, byte[] image, string Ten_mes, string loainhan, Image img)
+        public void addinmessage(string message, string time, buble.msgtype a, int width, byte[] image, string Ten_mes, string loainhan,byte[] img)
         {
             left_mes = width;
             buble bb1=new buble();
@@ -43,8 +43,14 @@ namespace bunifu
             }
             if (loainhan=="1")
             {
-                bb1 = new buble(img);
+                MemoryStream mem = new MemoryStream(img);
+                Image image1 = System.Drawing.Image.FromStream(mem);
+                bb1 = new buble(image1);
             }
+            if (loainhan=="2")
+            {
+                bb1 = new buble(message,time, img);
+            }    
             bb1.Location = buble1.Location;
             //bb1.Size = buble1.Size;
             bb1.Anchor = buble1.Anchor;
@@ -135,6 +141,8 @@ namespace bunifu
         }
         public static string Encrypt(string toEncrypt)
         {
+            if (toEncrypt == "")
+                return toEncrypt;
             string key = "Kamisama43423";
             bool useHashing = true;
             byte[] keyArray;
@@ -182,20 +190,59 @@ namespace bunifu
                 {
                     Image img = new Bitmap(open.FileName);
                     tam = File.ReadAllBytes(open.FileName);
-                    addinmessage(richTextBox1.Text, "", buble.msgtype.Out, left_mes, new byte[100], "", "1",img);
+                    
                     
                 }
             }
-            data dt = new data();
-            dt.ten = My_name;
-            dt.id_recv = Int32.Parse(Id_N);
-            dt.id_send = Int32.Parse(Id_M);
-            dt.img = my_img;
-            dt.image = tam;
-            dt.loai_mes = loaimes;
-            dt.loai_nhan = "1";
-            clt.Send(dt);
-        }       
+            if (tam.Length < 10000000)
+            {
+                addinmessage(richTextBox1.Text, "", buble.msgtype.Out, left_mes, new byte[100], "", "1", tam);
+                data dt = new data();
+                dt.ten = My_name;
+                dt.id_recv = Int32.Parse(Id_N);
+                dt.id_send = Int32.Parse(Id_M);
+                dt.img = my_img;
+                dt.image = tam;
+                dt.loai_mes = loaimes;
+                dt.loai_nhan = "1";
+                clt.Send(dt);
+            }
+            else
+                MessageBox.Show("your file size is too big (10Mb)", "Notification", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void guna2ImageButton1_Click(object sender, EventArgs e)
+        {
+            DateTime now = DateTime.Now;
+            string s = now.Day.ToString() + "/" + now.Month + " " + now.Hour.ToString() + ":" + now.Minute.ToString() + ":" + now.Second.ToString();
+            byte[] tam = new byte[1];
+            string file_name="";
+            using (OpenFileDialog open = new OpenFileDialog())
+            {
+                if (open.ShowDialog() == DialogResult.OK)
+                {
+                    file_name = open.SafeFileName;
+                    tam = File.ReadAllBytes(open.FileName);
+                }
+            }
+            if (tam.Length < 10000000)
+            {
+                addinmessage(file_name, s, buble.msgtype.Out, left_mes, new byte[100], "", "2", tam);
+                data dt = new data();
+                dt.ten = My_name;
+                dt.msg = Encrypt(file_name);
+                dt.id_recv = Int32.Parse(Id_N);
+                dt.id_send = Int32.Parse(Id_M);
+                dt.img = my_img;
+                dt.time = s;
+                dt.image = tam;
+                dt.loai_mes = loaimes;
+                dt.loai_nhan = "2";
+                clt.Send(dt);
+            }
+            else
+                MessageBox.Show("your file size is too big (10Mb)", "Notification", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
     }
  
 }

@@ -93,12 +93,11 @@ namespace bunifu
                 string time = row["Time"].ToString();
                 string id = row["Id_S"].ToString();
                 string loainhan = row["Loai_nhan"].ToString();
-                Image img_send=null;
+                byte[] image_send = new byte[1];
                 if (loainhan=="1")
                 {
-                    byte[] image_send = (byte[])row["Data_byte"];
-                    MemoryStream mem = new MemoryStream(image_send);
-                    img_send = System.Drawing.Image.FromStream(mem);
+                    image_send = (byte[])row["Data_byte"];
+                    
                 }    
                 byte[] pic = img;
                 string Ten_mes = "";
@@ -111,10 +110,10 @@ namespace bunifu
                 }
                 if (id.ToString() == Id_M)
                 {
-                    chat.addinmessage(message, time, buble.msgtype.Out, width, pic,Ten_mes,loainhan,img_send);
+                    chat.addinmessage(message, time, buble.msgtype.Out, width, pic,Ten_mes,loainhan,image_send);
                 }
                 else
-                    chat.addinmessage(message, time, buble.msgtype.In, width, pic,Ten_mes,loainhan,img_send);
+                    chat.addinmessage(message, time, buble.msgtype.In, width, pic,Ten_mes,loainhan,image_send);
             }    
             //SqlCommand cmd = new SqlCommand(sqll, strConnect);           
             //SqlDataReader dta = cmd.ExecuteReader();
