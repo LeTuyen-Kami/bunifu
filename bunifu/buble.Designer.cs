@@ -57,7 +57,6 @@
             this.label1.BackColor = System.Drawing.Color.Transparent;
             this.label1.Dock = System.Windows.Forms.DockStyle.Top;
             this.label1.Location = new System.Drawing.Point(10, 10);
-            this.label1.MaximumSize = new System.Drawing.Size(480, 300);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(480, 256);
             this.label1.TabIndex = 5;
@@ -72,7 +71,6 @@
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
             this.Controls.Add(this.lbltime);
             this.Controls.Add(this.label1);
-            this.MaximumSize = new System.Drawing.Size(500, 500);
             this.Name = "buble";
             this.Padding = new System.Windows.Forms.Padding(10);
             this.Size = new System.Drawing.Size(500, 313);

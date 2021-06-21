@@ -109,7 +109,7 @@ namespace Server
                 while (true)
                 {
                     //khởi tạo mảng byte để nhận dữ liệu
-                    byte[] datat = new byte[1024 * 5000];
+                    byte[] datat = new byte[1024 * 10000];
                     client.Receive(datat);
                     //chuyển data từ dạng byte sang dạng string
                     data message = (data)Deseriliaze(datat);
@@ -119,18 +119,27 @@ namespace Server
                     {
                         data dt = new data();
                         dt.style = 0;
+                        dt.ten = message.ten;
                         dt.msg = message.msg;
                         dt.id_recv = message.id_recv;
+                        dt.img = message.img;
+                        dt.loai_mes = message.loai_mes;
+                        dt.loai_nhan = message.loai_nhan;
+                        dt.id_send = message.id_send;
                         Create_Connect();
-                        string sql = "Insert into Message (Id_S, Id_R, Message,Time) "
-                                                         + " values (@s, @r, @msg,@time) ";
+                        string sql = "Insert into Message (Id_S, Id_R, Message,Time,Loai_mes,Loai_nhan,Data_byte) "
+                                                         + " values (@s, @r, @msg,@time,@lm,@ln,@dtb) ";
                         SqlCommand cmd = strConnect.CreateCommand();
                         cmd.CommandText = sql;
                         cmd.Parameters.Add("@s", SqlDbType.Int).Value = message.id_send;
                         cmd.Parameters.Add("@r", SqlDbType.Int).Value = message.id_recv;
                         cmd.Parameters.Add("@msg", SqlDbType.NVarChar).Value = message.msg;
                         cmd.Parameters.Add("@time", SqlDbType.NVarChar).Value = message.time;
+                        cmd.Parameters.Add("@lm", SqlDbType.NVarChar).Value = message.loai_mes;
+                        cmd.Parameters.Add("@ln", SqlDbType.NVarChar).Value = message.loai_nhan;
+                        cmd.Parameters.Add("@dtb", SqlDbType.Image).Value = message.image;
                         cmd.ExecuteNonQuery();
+                        
                         strConnect.Close();
                         this.BeginInvoke((MethodInvoker)delegate ()
                         {
@@ -507,7 +516,7 @@ namespace Server
             }
             catch (Exception e)
             {
-                //MessageBox.Show(e.Message);
+                MessageBox.Show(e.Message);
                 clientList.Remove(client);
                 client.Close();
             }

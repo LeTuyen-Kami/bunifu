@@ -78,7 +78,7 @@ namespace bunifu
                         DataTable datainfo = new DataTable();
                         datainfo = dt.ds.Tables["Info"];
                         MemoryStream mem = new MemoryStream((byte[])datainfo.Rows[0]["Img"]);
-                        guna2PictureBox1.Image = Image.FromStream(mem);
+                        guna2PictureBox1.Image =System.Drawing.Image.FromStream(mem);
                         label6.Text = datainfo.Rows[0]["Ten"].ToString();
                         label7.Text = datainfo.Rows[0]["Sex"].ToString();
                         label8.Text= datainfo.Rows[0]["Ngaysinh"].ToString();

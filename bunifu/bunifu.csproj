@@ -189,6 +189,12 @@
     <Compile Include="Friend.Designer.cs">
       <DependentUpon>Friend.cs</DependentUpon>
     </Compile>
+    <Compile Include="Image_show.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Image_show.Designer.cs">
+      <DependentUpon>Image_show.cs</DependentUpon>
+    </Compile>
     <Compile Include="Info.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -265,6 +271,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Friend.resx">
       <DependentUpon>Friend.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Image_show.resx">
+      <DependentUpon>Image_show.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Info.resx">
       <DependentUpon>Info.cs</DependentUpon>
@@ -359,6 +368,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="icon.ico" />
+    <None Include="Resources\image-gallery.png" />
+    <None Include="Resources\attach.png" />
+    <None Include="Resources\send.png" />
+    <None Include="Resources\user-group.png" />
     <None Include="Resources\close.png" />
     <None Include="Resources\friends %281%29.png" />
     <None Include="Resources\friends.png" />

@@ -32,11 +32,14 @@ namespace bunifu
             {
                 image = img;
                 MemoryStream mem = new MemoryStream(img);
-                guna2CirclePictureBox1.Image = Image.FromStream(mem);
+                guna2CirclePictureBox1.Image =System.Drawing.Image.FromStream(mem);
                 guna2CirclePictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
             }
             else
+            {
                 guna2CirclePictureBox1.Visible = false;
+                guna2Button1.TextAlign = HorizontalAlignment.Center;
+            }
         }
         public void Esclip()
         {
@@ -53,21 +56,18 @@ namespace bunifu
             }    
             if (phanloai==0)
             {
-                showchatbox(Id_ban);
+                Danhsach_tinnhan tam = control as Danhsach_tinnhan;
+                tam.showchatbox(Id_ban, image, guna2Button1.Text,"0");
             } 
             if (phanloai==2)
             {
-                //guna2CirclePictureBox1.Visible = false;
+                Danhsach_tinnhan tam = control as Danhsach_tinnhan;
+                tam.showchatbox(Id_ban, image, guna2Button1.Text, "1");
             }    
         }
         public void usercontrol(UserControl userControl)
         {
             control = userControl;
-        }
-        public void showchatbox(string s)
-        {
-            Danhsach_tinnhan tam= control as Danhsach_tinnhan;
-            tam.showchatbox(s,image,guna2Button1.Text);
         }
     }
 }

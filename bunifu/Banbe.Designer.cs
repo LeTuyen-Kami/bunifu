@@ -50,7 +50,7 @@
             this.guna2Button1.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.guna2Button1.ForeColor = System.Drawing.Color.Black;
             this.guna2Button1.HoverState.Parent = this.guna2Button1;
-            this.guna2Button1.Location = new System.Drawing.Point(-92, 0);
+            this.guna2Button1.Location = new System.Drawing.Point(-259, 0);
             this.guna2Button1.Name = "guna2Button1";
             this.guna2Button1.ShadowDecoration.Parent = this.guna2Button1;
             this.guna2Button1.Size = new System.Drawing.Size(568, 54);
@@ -77,7 +77,7 @@
             this.Controls.Add(this.guna2CirclePictureBox1);
             this.Controls.Add(this.guna2Button1);
             this.Name = "Banbe";
-            this.Size = new System.Drawing.Size(476, 54);
+            this.Size = new System.Drawing.Size(309, 54);
             ((System.ComponentModel.ISupportInitialize)(this.guna2CirclePictureBox1)).EndInit();
             this.ResumeLayout(false);
 

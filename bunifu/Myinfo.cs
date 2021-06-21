@@ -57,7 +57,7 @@ namespace bunifu
             Ns.Text = Data.Rows[0][6].ToString();
             Nt.Text = Data.Rows[0][7].ToString();
             MemoryStream mem = new MemoryStream((byte[])Data.Rows[0][4]);
-            pictureBox1.Image = Image.FromStream(mem);
+            pictureBox1.Image =System.Drawing.Image.FromStream(mem);
             pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
             Id.ReadOnly = true;
             Taikhoan.ReadOnly = true;

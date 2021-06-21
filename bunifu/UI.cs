@@ -34,6 +34,8 @@ namespace bunifu
         string Id_M = "1";
         bool EnableA=true;
         Danhsach_tinnhan danhsach = new Danhsach_tinnhan();
+        byte[] my_img;
+        string My_name="";
         public none()
         {
             InitializeComponent();
@@ -82,7 +84,7 @@ namespace bunifu
                 while (true)
                 {
                     //khai báo mảng byte để nhận dữ liệu dưới mảng byte
-                    byte[] data = new byte[1024 * 5000];
+                    byte[] data = new byte[1024 * 10000];
                     client.Receive(data);
                     //chuyển data từ dạng byte sang dạng string
                     data message = (data)Deseriliaze(data);
@@ -91,7 +93,7 @@ namespace bunifu
                         if (message.id_recv.ToString()==Id_M)
                         {
                             DataSet ds = message.ds;
-                            guna2Button2.Image = new Bitmap(@"D:\Lập trình mạng\bunifu\notification.png");
+                            guna2Button2.Image = new Bitmap(@"notification.png");
                             dataTable2 = ds.Tables["ketban"];
                         }
 
@@ -121,7 +123,7 @@ namespace bunifu
                         }  
                         if (message.id_recv.ToString()==Id_M)
                         {
-                            guna2Button2.Image = new Bitmap(@"D:\Lập trình mạng\bunifu\notification.png");
+                            guna2Button2.Image = new Bitmap(@"notification.png");
                             dataTable2 = ds.Tables["ketban2"];
                             datafriend = ds.Tables["ban1"];
 
@@ -156,23 +158,36 @@ namespace bunifu
                         dataTable1 = ds.Tables["data"];
                         dataTable2 = ds.Tables["ketban"];
                         data_nhom = ds.Tables["nhom"];
+                        string[] source =dataTable1.Rows[0]["Ten"].ToString().Split(new char[] {' '});                       
+                        label1.Text = source[source.Count()-1];
+                        My_name = label1.Text;
                         MemoryStream mem = new MemoryStream((byte[])dataTable1.Rows[0][4]);
-                        guna2CirclePictureBox1.Image = Image.FromStream(mem);
+                        guna2CirclePictureBox1.Image =System.Drawing.Image.FromStream(mem);
                         guna2CirclePictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
                         datafriend = ds.Tables["ban"];
                         if (checkread(dataTable2))
                         {
-                            guna2Button2.Image = new Bitmap(@"D:\Lập trình mạng\bunifu\notification.png");
+                            guna2Button2.Image = new Bitmap(@"notification.png");
                         }
                     }
                     if (message.style == 0)
                     {
                         this.BeginInvoke((MethodInvoker)delegate ()
                         {
-                            if (message.id_recv.ToString() == Id_M)
+                            if (message.loai_mes=="0")
                             {
-                                danhsach.add_mes(message.msg);
-                            }
+                                if (message.id_recv.ToString() == Id_M)
+                                {
+                                    danhsach.add_mes(message,0);
+                                }
+                            }    
+                            if (message.loai_mes=="1")
+                            {
+                                if (check_have(message.id_recv.ToString()))
+                                {
+                                    danhsach.add_mes(message,1);
+                                }    
+                            }    
                         });
                     }
                 }
@@ -344,7 +359,7 @@ namespace bunifu
             {
                 row["Readed"] = "1";
             }
-            guna2Button2.Image = new Bitmap(@"D:\Lập trình mạng\bunifu\notification1.png");
+            guna2Button2.Image = new Bitmap(@"notification1.png");
             noctice.Dock = DockStyle.Fill;
             noctice.BringToFront();
             data dt = new data();
@@ -352,7 +367,7 @@ namespace bunifu
             dt.id_send =int.Parse(Id_M);
             Send(dt);
         }
-        public void changeImage(Image image)
+        public void changeImage(System.Drawing.Image image)
         {
             guna2CirclePictureBox1.Image = image;
         }
@@ -400,11 +415,21 @@ namespace bunifu
                 }    
             }    
         }
+        public bool check_have(string s)
+        {
+            foreach (DataRow row in data_nhom.Rows)
+            {
+                if (s == row["Id_nhom"].ToString())
+                    return true;
+            }
+            return false;
+        }
         private void guna2Button1_Click(object sender, EventArgs e)
         {
+            my_img =(byte[])dataTable1.Rows[0]["Img"];
             danhsach = new Danhsach_tinnhan();
             panel4.Controls.Add(danhsach);
-            danhsach.nhap_data(datafriend,data_nhom, Id_M);
+            danhsach.nhap_data(datafriend,data_nhom, Id_M,my_img,My_name);
             danhsach.Dock = DockStyle.Fill;
             danhsach.BringToFront();
         }

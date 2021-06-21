@@ -16,6 +16,25 @@ namespace bunifu
         {
             InitializeComponent();
         }
+        public buble(Image img)
+        {
+            InitializeComponent();
+            label1.Visible = false;
+            lbltime.Visible = false;
+            this.Size = new Size(391, 292);
+            int h = img.Height;
+            int w = img.Width;
+            if (h < this.Height && w < this.Width)
+            {
+                this.Size = new Size(w, h);
+                this.BackgroundImage = img;
+            }
+            else
+            {
+                this.Size = new Size(this.Width, (int)((this.Width * h) / w));
+                this.BackgroundImage = resize(img, this.Width, this.Height);
+            }
+        }
         public buble(string message, string time, msgtype messagetype)
         {
             InitializeComponent();
@@ -42,7 +61,7 @@ namespace bunifu
             SizeF size = g.MeasureString(label1.Text, label1.Font, label1.Width);
             label1.Height = int.Parse(Math.Round(size.Height + 10, 0).ToString());
             Size sizef = TextRenderer.MeasureText(label1.Text, label1.Font);
-            if (sizef.Width<label1.MaximumSize.Width-5)
+            if (sizef.Width<300-5)
             {
                 if (sizef.Width>lbltime.Width)
                 {
@@ -59,7 +78,14 @@ namespace bunifu
             lbltime.Top = label1.Bottom;
             this.Height = lbltime.Bottom + 10;
         }
-
+        System.Drawing.Image resize(System.Drawing.Image img, int w, int h)
+        {
+            Bitmap bmp = new Bitmap(w, h);
+            Graphics graphics = Graphics.FromImage(bmp);
+            graphics.DrawImage(img, 0, 0, w, h);
+            graphics.Dispose();
+            return bmp;
+        }
         private void lbltime_Resize(object sender, EventArgs e)
         {
             //if (label1.Width <= lbltime.Width) this.Width = lbltime.Width+40;
@@ -70,7 +96,7 @@ namespace bunifu
 
         private void buble_Resize(object sender, EventArgs e)
         {
-            setheight();
+            //setheight();
         }
     }
 }

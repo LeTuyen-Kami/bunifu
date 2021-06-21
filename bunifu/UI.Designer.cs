@@ -36,6 +36,7 @@
             this.guna2Button2 = new Guna.UI2.WinForms.Guna2Button();
             this.guna2Button1 = new Guna.UI2.WinForms.Guna2Button();
             this.panel4 = new System.Windows.Forms.Panel();
+            this.label1 = new System.Windows.Forms.Label();
             this.guna2GradientPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.guna2CirclePictureBox1)).BeginInit();
             this.SuspendLayout();
@@ -43,6 +44,7 @@
             // guna2GradientPanel1
             // 
             this.guna2GradientPanel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(253)))), ((int)(((byte)(112)))), ((int)(((byte)(161)))));
+            this.guna2GradientPanel1.Controls.Add(this.label1);
             this.guna2GradientPanel1.Controls.Add(this.guna2Button3);
             this.guna2GradientPanel1.Controls.Add(this.guna2CirclePictureBox1);
             this.guna2GradientPanel1.Controls.Add(this.guna2Button4);
@@ -66,15 +68,15 @@
             this.guna2Button3.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.guna2Button3.ForeColor = System.Drawing.Color.White;
             this.guna2Button3.HoverState.Parent = this.guna2Button3;
-            this.guna2Button3.Image = global::bunifu.Properties.Resources.friends__1_;
+            this.guna2Button3.Image = global::bunifu.Properties.Resources.user_group;
             this.guna2Button3.ImageAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.guna2Button3.ImageOffset = new System.Drawing.Point(10, 0);
-            this.guna2Button3.Location = new System.Drawing.Point(6, 209);
+            this.guna2Button3.Location = new System.Drawing.Point(6, 203);
             this.guna2Button3.Name = "guna2Button3";
             this.guna2Button3.ShadowDecoration.Parent = this.guna2Button3;
             this.guna2Button3.Size = new System.Drawing.Size(194, 45);
             this.guna2Button3.TabIndex = 3;
-            this.guna2Button3.Text = "guna2Button3";
+            this.guna2Button3.Text = "Create group";
             this.guna2Button3.TextOffset = new System.Drawing.Point(10, 0);
             this.guna2Button3.Click += new System.EventHandler(this.guna2Button3_Click_1);
             // 
@@ -95,7 +97,7 @@
             this.guna2Button4.ShadowDecoration.Parent = this.guna2Button4;
             this.guna2Button4.Size = new System.Drawing.Size(194, 45);
             this.guna2Button4.TabIndex = 2;
-            this.guna2Button4.Text = "guna2Button4";
+            this.guna2Button4.Text = "Friend";
             this.guna2Button4.TextOffset = new System.Drawing.Point(10, 0);
             this.guna2Button4.Click += new System.EventHandler(this.guna2Button4_Click);
             // 
@@ -128,7 +130,7 @@
             this.guna2Button2.ShadowDecoration.Parent = this.guna2Button2;
             this.guna2Button2.Size = new System.Drawing.Size(194, 45);
             this.guna2Button2.TabIndex = 1;
-            this.guna2Button2.Text = "guna2Button2";
+            this.guna2Button2.Text = "Notification";
             this.guna2Button2.TextOffset = new System.Drawing.Point(10, 0);
             this.guna2Button2.Click += new System.EventHandler(this.guna2Button2_Click);
             // 
@@ -150,7 +152,7 @@
             this.guna2Button1.ShadowDecoration.Parent = this.guna2Button1;
             this.guna2Button1.Size = new System.Drawing.Size(194, 45);
             this.guna2Button1.TabIndex = 0;
-            this.guna2Button1.Text = "guna2Button1";
+            this.guna2Button1.Text = "Home";
             this.guna2Button1.TextOffset = new System.Drawing.Point(10, 0);
             this.guna2Button1.Click += new System.EventHandler(this.guna2Button1_Click);
             // 
@@ -161,6 +163,16 @@
             this.panel4.Name = "panel4";
             this.panel4.Size = new System.Drawing.Size(904, 584);
             this.panel4.TabIndex = 9;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(76, 28);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(53, 20);
+            this.label1.TabIndex = 4;
+            this.label1.Text = "Name";
             // 
             // none
             // 
@@ -177,6 +189,7 @@
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.none_FormClosing);
             this.Load += new System.EventHandler(this.none_Load);
             this.guna2GradientPanel1.ResumeLayout(false);
+            this.guna2GradientPanel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.guna2CirclePictureBox1)).EndInit();
             this.ResumeLayout(false);
 
@@ -190,5 +203,6 @@
         private Guna.UI2.WinForms.Guna2Button guna2Button4;
         private System.Windows.Forms.Panel panel4;
         private Guna.UI2.WinForms.Guna2Button guna2Button3;
+        private System.Windows.Forms.Label label1;
     }
 }
