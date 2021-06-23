@@ -69,7 +69,7 @@ namespace bunifu
             int width = panel3.Width;
             chat = new chatbox();
             chat.Dock = DockStyle.Fill;
-            chat.Thongtin(ten,img,my_image,loai_mes,My_name);
+            chat.Thongtin(ten,img,my_image,loai_mes,My_name,datat);
             chat.IdM(Id_M);
             chat.IdN(s);
             Create_Connect();

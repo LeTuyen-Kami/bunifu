@@ -439,5 +439,23 @@ namespace bunifu
             taonhom.nhap(datafriend,Id_M);
             taonhom.ShowDialog();
         }
+
+        private void guna2Button6_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("Are you sure you want to exit?","Question",MessageBoxButtons.YesNo,MessageBoxIcon.Question)==DialogResult.Yes)
+            {
+                Application.Exit();
+            }
+        }
+
+        private void guna2Button5_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("Do you want to sign out?","Question",MessageBoxButtons.YesNo,MessageBoxIcon.Question)==DialogResult.Yes)
+            {
+                Login login = new Login();
+                login.Show();                
+                this.Hide();
+            }    
+        }
     }
 }

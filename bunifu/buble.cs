@@ -18,7 +18,17 @@ namespace bunifu
         {
             InitializeComponent();
         }
-        public buble(string s,string time,byte[] data)
+        public buble(int i)
+        {
+            InitializeComponent();
+            this.Size = new Size(42,43);
+            label1.Visible = false;
+            lbltime.Visible = false;
+            this.BackgroundImage = new Bitmap(@"like.png");
+            this.BackgroundImageLayout = ImageLayout.Stretch;
+            this.BackColor = Color.Transparent;
+        }
+        public buble(string s,string time,byte[] data,msgtype messagetype)
         {
             InitializeComponent();
             Data_file = data;
@@ -26,6 +36,14 @@ namespace bunifu
             lbltime.Text = time;
             label1.Cursor = Cursors.Hand;
             label1.Font = new Font(label1.Font.Name, 12, FontStyle.Underline);
+            if (messagetype.ToString() == "In")
+            {
+                this.BackColor = Color.Gray;
+            }
+            else
+            {
+                this.BackColor = Color.FromArgb(213, 67, 183);
+            }
             label1.Click += new EventHandler(label_click);
             setheight();
         }
