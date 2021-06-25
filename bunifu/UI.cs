@@ -32,14 +32,17 @@ namespace bunifu
         DataTable dataTable2 = new DataTable();
         DataTable datafriend = new DataTable();
         string Id_M = "1";
-        bool EnableA=true;
+        bool EnableA = true;
         Danhsach_tinnhan danhsach = new Danhsach_tinnhan();
         byte[] my_img;
-        string My_name="";
+        string My_name = "";
         public none()
         {
             InitializeComponent();
             CheckForIllegalCrossThreadCalls = false;//tránh việc đụng độ khi sử dụng tài nguyên giữa các thread
+            random = new Random();
+            listbutton = new List<Guna2Button>() {guna2Button1,guna2Button2,guna2Button3,guna2Button4,guna2Button5,guna2Button6 };
+            this.ControlBox = false;
         }
         public void Id(string id)
         {
@@ -90,7 +93,7 @@ namespace bunifu
                     data message = (data)Deseriliaze(data);
                     if (message.style == 1)
                     {
-                        if (message.id_recv.ToString()==Id_M)
+                        if (message.id_recv.ToString() == Id_M)
                         {
                             DataSet ds = message.ds;
                             guna2Button2.Image = new Bitmap(@"notification.png");
@@ -111,58 +114,58 @@ namespace bunifu
                         //    panel3.Controls.Add(button);
                         //    but_old = button;
                         //});
-                    }  
-                    if (message.style==2)
+                    }
+                    if (message.style == 2)
                     {
                         DataSet ds = message.ds;
-                        
-                        if (message.id_send.ToString()==Id_M)
+
+                        if (message.id_send.ToString() == Id_M)
                         {
                             dataTable2 = ds.Tables["ketban1"];
                             datafriend = ds.Tables["ban2"];
-                        }  
-                        if (message.id_recv.ToString()==Id_M)
+                        }
+                        if (message.id_recv.ToString() == Id_M)
                         {
                             guna2Button2.Image = new Bitmap(@"notification.png");
                             dataTable2 = ds.Tables["ketban2"];
                             datafriend = ds.Tables["ban1"];
 
-                        }    
-                    } 
-                    if (message.style==3)
+                        }
+                    }
+                    if (message.style == 3)
                     {
                         DataSet ds = message.ds;
-                        if (message.id_recv.ToString()==Id_M)
+                        if (message.id_recv.ToString() == Id_M)
                         {
                             datafriend = ds.Tables["ban2"];
-                        }  
-                        if (message.id_send.ToString()==Id_M)
+                        }
+                        if (message.id_send.ToString() == Id_M)
                         {
                             datafriend = ds.Tables["ban1"];
-                        }    
-                    }   
-                    if (message.style==4)
+                        }
+                    }
+                    if (message.style == 4)
                     {
                         foreach (DataRow row in message.ds.Tables["Thanhvien"].Rows)
                         {
-                            if (row["Id"].ToString()==Id_M)
+                            if (row["Id"].ToString() == Id_M)
                             {
-                                data_nhom.Rows.Add(new object[] { message.id,message.ten });
+                                data_nhom.Rows.Add(new object[] { message.id, message.ten });
                                 break;
-                            }    
-                        }    
-                    }    
+                            }
+                        }
+                    }
                     if (message.style == 10)
                     {
                         DataSet ds = message.ds;
                         dataTable1 = ds.Tables["data"];
                         dataTable2 = ds.Tables["ketban"];
                         data_nhom = ds.Tables["nhom"];
-                        string[] source =dataTable1.Rows[0]["Ten"].ToString().Split(new char[] {' '});                       
-                        label1.Text = source[source.Count()-1];
+                        string[] source = dataTable1.Rows[0]["Ten"].ToString().Split(new char[] { ' ' });
+                        label1.Text = source[source.Count() - 1];
                         My_name = label1.Text;
                         MemoryStream mem = new MemoryStream((byte[])dataTable1.Rows[0][4]);
-                        guna2CirclePictureBox1.Image =System.Drawing.Image.FromStream(mem);
+                        guna2CirclePictureBox1.Image = System.Drawing.Image.FromStream(mem);
                         guna2CirclePictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
                         datafriend = ds.Tables["ban"];
                         if (checkread(dataTable2))
@@ -174,25 +177,25 @@ namespace bunifu
                     {
                         this.BeginInvoke((MethodInvoker)delegate ()
                         {
-                            if (message.loai_mes=="0")
+                            if (message.loai_mes == "0")
                             {
                                 if (message.id_recv.ToString() == Id_M)
                                 {
-                                    danhsach.add_mes(message,0);
+                                    danhsach.add_mes(message, 0);
                                 }
-                            }    
-                            if (message.loai_mes=="1")
+                            }
+                            if (message.loai_mes == "1")
                             {
                                 if (check_have(message.id_recv.ToString()))
                                 {
-                                    danhsach.add_mes(message,1);
-                                }    
-                            }    
+                                    danhsach.add_mes(message, 1);
+                                }
+                            }
                         });
                     }
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 //MessageBox.Show(e.Message);
                 //close();
@@ -241,10 +244,10 @@ namespace bunifu
 
         private void guna2TextBox1_TextChanged(object sender, EventArgs e)
         {
-            string temp="";
-            
-                DataSet data = new DataSet();
-                string query = "select Ten from Account where Id LIKE '" + temp + "' + '%'";
+            string temp = "";
+
+            DataSet data = new DataSet();
+            string query = "select Ten from Account where Id LIKE '" + temp + "' + '%'";
             using (SqlConnection sql = new SqlConnection
                 ("Data Source=LAPTOP-EGRB430C\\SQLEXPRESS;Initial Catalog=ten;Integrated Security=True"))
             {
@@ -269,7 +272,7 @@ namespace bunifu
                 e.SuppressKeyPress = true;
                 data dt = new data();
                 dt.style = 4;
-                dt.id_send =int.Parse(Id_M);
+                dt.id_send = int.Parse(Id_M);
                 Send(dt);
                 MessageBox.Show("Đã kêt bạn thành công", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
@@ -333,13 +336,18 @@ namespace bunifu
 
         private void guna2CirclePictureBox1_Click(object sender, EventArgs e)
         {
-            Myinfo minfo = new Myinfo();
+            if (activeForm != null)
+                panel4.Controls.Remove(activeForm);
+            Color color = SelectThemeColor();
+            panel1.BackColor = color;
+            Myinfo minfo = new Myinfo(color);
+            activeForm = minfo;
             minfo.RId(Id_M);
             minfo.Dock = DockStyle.Fill;
             panel4.Controls.Add(minfo);
             minfo.BringToFront();
             minfo.datatable(dataTable1);
-            
+
         }
         public bool checkread(DataTable dataTable)
         {
@@ -351,9 +359,13 @@ namespace bunifu
 
         private void guna2Button2_Click(object sender, EventArgs e)
         {
-
-            Setnotice noctice = new Setnotice();
-            noctice.set(dataTable2,Id_M);
+            if (activeForm != null)
+                panel4.Controls.Remove(activeForm);
+            Color color = ActivateButton(sender);
+            panel1.BackColor = color;
+            Setnotice noctice = new Setnotice(color);
+            activeForm = noctice;
+            noctice.set(dataTable2, Id_M);
             panel4.Controls.Add(noctice);
             foreach (DataRow row in dataTable2.Rows)
             {
@@ -364,7 +376,7 @@ namespace bunifu
             noctice.BringToFront();
             data dt = new data();
             dt.style = 6;
-            dt.id_send =int.Parse(Id_M);
+            dt.id_send = int.Parse(Id_M);
             Send(dt);
         }
         public void changeImage(System.Drawing.Image image)
@@ -386,17 +398,23 @@ namespace bunifu
         //}
         private void guna2Button4_Click(object sender, EventArgs e)
         {
-            Friend friend = new Friend();
-            friend.Setfriend(datafriend,Id_M);
+            if (activeForm != null)
+                panel4.Controls.Remove(activeForm);
+            Color color = ActivateButton(sender);
+            panel1.BackColor = color;
+            panel1.BackColor = color;
+            Friend friend = new Friend(color);
+            activeForm = friend;
+            friend.Setfriend(datafriend, Id_M);
             panel4.Controls.Add(friend);
             friend.Dock = DockStyle.Fill;
             friend.BringToFront();
 
         }
-        public void addcontrols(string id,int a)
+        public void addcontrols(string id, int a,Color color)
         {
-            Info info = new Info();
-            info.AddId(id,a,Id_M,EnableA);
+            Info info = new Info(color);
+            info.AddId(id, a, Id_M, EnableA);
             panel4.Controls.Add(info);
             info.Dock = DockStyle.Fill;
             info.BringToFront();
@@ -409,11 +427,11 @@ namespace bunifu
         {
             foreach (DataRow row in dataTable2.Rows)
             {
-                if (row["Nguoigui"].ToString()==id1)
+                if (row["Nguoigui"].ToString() == id1)
                 {
                     row["Status"] = "Refuse";
-                }    
-            }    
+                }
+            }
         }
         public bool check_have(string s)
         {
@@ -426,23 +444,32 @@ namespace bunifu
         }
         private void guna2Button1_Click(object sender, EventArgs e)
         {
-            my_img =(byte[])dataTable1.Rows[0]["Img"];
-            danhsach = new Danhsach_tinnhan();
+            if (activeForm != null)
+                panel4.Controls.Remove(activeForm);
+            Color color= ActivateButton(sender);
+            panel1.BackColor = color;
+            my_img = (byte[])dataTable1.Rows[0]["Img"];
+            danhsach = new Danhsach_tinnhan(color);
+            activeForm = danhsach;
             panel4.Controls.Add(danhsach);
-            danhsach.nhap_data(datafriend,data_nhom, Id_M,my_img,My_name);
+            danhsach.nhap_data(datafriend, data_nhom, Id_M, my_img, My_name);
             danhsach.Dock = DockStyle.Fill;
             danhsach.BringToFront();
         }
         private void guna2Button3_Click_1(object sender, EventArgs e)
         {
-            Taonhom taonhom = new Taonhom();
-            taonhom.nhap(datafriend,Id_M);
+            Color color = ActivateButton(sender);
+            panel1.BackColor = color;
+            Taonhom taonhom = new Taonhom(color);
+            taonhom.nhap(datafriend, Id_M);
             taonhom.ShowDialog();
         }
 
         private void guna2Button6_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("Are you sure you want to exit?","Question",MessageBoxButtons.YesNo,MessageBoxIcon.Question)==DialogResult.Yes)
+            Color color = ActivateButton(sender);
+            panel1.BackColor = color;
+            if (MessageBox.Show("Are you sure you want to exit?", "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
                 Application.Exit();
             }
@@ -450,12 +477,91 @@ namespace bunifu
 
         private void guna2Button5_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("Do you want to sign out?","Question",MessageBoxButtons.YesNo,MessageBoxIcon.Question)==DialogResult.Yes)
+            Color color= ActivateButton(sender);
+            panel1.BackColor = color;
+            if (MessageBox.Show("Do you want to sign out?", "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
                 Login login = new Login();
-                login.Show();                
+                login.Show();
                 this.Hide();
-            }    
+            }
         }
+        //chỉnh màu
+        private Guna2Button currentButton;
+        private Random random;
+        private int tempIndex;
+        private UserControl activeForm;
+        private Color SelectThemeColor()
+        {
+            int index = random.Next(ThemeColor.ColorList.Count);
+            while (tempIndex == index)
+            {
+                index = random.Next(ThemeColor.ColorList.Count);
+            }
+            tempIndex = index;
+            string color = ThemeColor.ColorList[index];
+            return ColorTranslator.FromHtml(color);
+        }
+        private Color ActivateButton(object btnSender)
+        {
+            Color color = Color.FromArgb(253, 112, 161);
+            if (btnSender != null)
+            {
+                if (currentButton != (Guna2Button)btnSender)
+                {
+                    DisableButton();
+                    color = SelectThemeColor();
+                    currentButton = (Guna2Button)btnSender;
+                    currentButton.FillColor = color;
+
+                    currentButton.ForeColor = Color.White;
+                    ThemeColor.PrimaryColor = color;
+                    ThemeColor.SecondaryColor = ThemeColor.ChangeColorBrightness(color, -0.3);
+                }
+            }
+            return color;
+        }
+        List<Guna2Button> listbutton;
+        private void DisableButton()
+        {
+            
+            foreach (Guna2Button previousBtn in listbutton)
+            {
+                if (previousBtn.GetType() == typeof(Guna2Button))
+                {
+                    previousBtn.FillColor = Color.FromArgb(253, 112, 161);
+                    previousBtn.ForeColor = Color.Gainsboro;
+                    //previousBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+                }
+            }
+        }
+        Guna2Button Min;
+        private void panelMenu_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                if (Min != null)
+                    panelMenu.Controls.Remove(Min);
+                Min = new Guna2Button();
+                Min.Location = e.Location;
+                Min.Size = new Size(100, 25);
+                Min.FillColor = Color.Transparent;
+                Min.Text = "Minimize";
+                Min.BringToFront();
+                panelMenu.Controls.Add(Min);
+                Min.Click += new EventHandler(minimize_click);
+            }
+            else
+            {
+                if (Min != null)
+                    panelMenu.Controls.Remove(Min);
+            }
+        }
+        private void minimize_click(object sender,EventArgs e)
+        {
+            this.WindowState = FormWindowState.Minimized;
+            if (Min!=null)
+                panelMenu.Controls.Remove(Min);
+        }    
     }
 }

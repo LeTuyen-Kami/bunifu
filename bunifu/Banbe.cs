@@ -18,9 +18,15 @@ namespace bunifu
         int phanloai;
         byte[] image;
         UserControl control;
+        Color Tile_color;
         public Banbe()
         {
             InitializeComponent();
+        }
+        public Banbe(Color color)
+        {
+            InitializeComponent();
+            Tile_color = color;
         }
         public void Addten(string s,string Id,byte[] img,string my_id,int loai)
         {
@@ -52,7 +58,7 @@ namespace bunifu
             if (phanloai==1)
             {
                 none no = (none)(this.ParentForm);
-                no.addcontrols(Id_ban, 0);
+                no.addcontrols(Id_ban, 0,Tile_color);
             }    
             if (phanloai==0)
             {

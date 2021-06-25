@@ -27,6 +27,11 @@ namespace bunifu
         {
             InitializeComponent();
         }
+        public Info(Color color)
+        {
+            InitializeComponent();
+            label1.BackColor = color;
+        }
         void Connect()
         {
             //IP là địa chỉ của server.Khởi tạo địa chỉ IP và socket để kết nối

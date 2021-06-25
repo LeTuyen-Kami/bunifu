@@ -16,6 +16,11 @@ namespace bunifu
         {
             InitializeComponent();
         }
+        public Setnotice(Color color)
+        {
+            InitializeComponent();
+            label1.BackColor = color;
+        }
         public void set(DataTable dataTable,string id)
         {
             for (int i=dataTable.Rows.Count-1;i>=0;i--)

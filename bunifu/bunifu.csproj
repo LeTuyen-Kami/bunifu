@@ -251,6 +251,7 @@
     <Compile Include="Thanhvien.Designer.cs">
       <DependentUpon>Thanhvien.cs</DependentUpon>
     </Compile>
+    <Compile Include="ThemeColor.cs" />
     <Compile Include="UI.cs">
       <SubType>Form</SubType>
     </Compile>

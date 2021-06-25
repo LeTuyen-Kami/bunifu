@@ -28,6 +28,11 @@ namespace bunifu
         {
             InitializeComponent();
         }
+        public Friend(Color color)
+        {
+            InitializeComponent();
+            label1.BackColor = color;
+        }
         void Connect()
         {
             //IP là địa chỉ của server.Khởi tạo địa chỉ IP và socket để kết nối
@@ -131,7 +136,7 @@ namespace bunifu
                 byte[] img =(byte[])row["Img"];
                 if (s!="")
                 {
-                    Banbe banbe = new Banbe();
+                    Banbe banbe = new Banbe(label1.BackColor);
                     banbe.Addten(s,id,img,Id_M,1);
                     banbe.Dock = DockStyle.Top;
                     flowLayoutPanel1.Controls.Add(banbe);
@@ -174,7 +179,7 @@ namespace bunifu
             //bunifuDataGridView1.Visible = false;
             none no = (none)(this.ParentForm);
             string s = banbe_id.Rows[e.RowIndex][1].ToString();
-            no.addcontrols(s,1);
+            no.addcontrols(s,1,label1.BackColor);
         }
     }
 }

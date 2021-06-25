@@ -32,6 +32,15 @@ namespace bunifu
             InitializeComponent();
             Connect();
         }
+        public Taonhom(Color color)
+        {
+            InitializeComponent();
+            label1.BackColor = color;
+            this.EnableBlur();
+            BackColor = Color.Azure;
+            TransparencyKey = Color.Azure;
+            Connect();
+        }
         IPEndPoint IP;
         Socket client;
         public bool isconnect;

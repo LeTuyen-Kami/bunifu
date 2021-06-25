@@ -28,6 +28,11 @@ namespace bunifu
         {
             InitializeComponent();
         }
+        public Danhsach_tinnhan(Color color)
+        {
+            InitializeComponent();
+            label1.BackColor = color;
+        }
         public void nhap_data(DataTable dataTable_ac,DataTable dataTable_nhom,string id,byte[] pic,string name)
         {
             My_name = name;

@@ -26,6 +26,12 @@ namespace bunifu
             InitializeComponent();
             clienT.Connect();
         }
+        public Myinfo(Color color)
+        {
+            InitializeComponent();
+            clienT.Connect();
+            label14.BackColor = color;
+        }
         string Id_M;      
         int temp = 0;
 
