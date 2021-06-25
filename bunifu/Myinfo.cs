@@ -287,5 +287,64 @@ namespace bunifu
             none no = (none)(this.ParentForm);
             no.Close();
         }
+
+        private void label7_MouseHover(object sender, EventArgs e)
+        {
+            label7.Font = new Font(this.Font,FontStyle.Underline);
+        }
+
+        private void label7_MouseLeave(object sender, EventArgs e)
+        {
+            label7.Font = new Font(this.Font, FontStyle.Regular);
+        }
+
+        private void label8_MouseHover(object sender, EventArgs e)
+        {
+            label8.Font = new Font(this.Font, FontStyle.Underline);
+
+        }
+
+        private void label8_MouseLeave(object sender, EventArgs e)
+        {
+            label8.Font = new Font(this.Font, FontStyle.Regular);
+
+        }
+
+        private void label9_MouseHover(object sender, EventArgs e)
+        {
+            label9.Font = new Font(this.Font, FontStyle.Underline);
+
+        }
+
+        private void label9_MouseLeave(object sender, EventArgs e)
+        {
+            label9.Font = new Font(this.Font, FontStyle.Regular);
+
+
+        }
+
+        private void label10_MouseHover(object sender, EventArgs e)
+        {
+            label10.Font = new Font(this.Font, FontStyle.Underline);
+
+        }
+
+        private void label10_MouseLeave(object sender, EventArgs e)
+        {
+            label10.Font = new Font(this.Font, FontStyle.Regular);
+
+        }
+
+        private void label11_MouseHover(object sender, EventArgs e)
+        {
+            label11.Font = new Font(this.Font, FontStyle.Underline);
+
+        }
+
+        private void label11_MouseLeave(object sender, EventArgs e)
+        {
+            label11.Font = new Font(this.Font, FontStyle.Regular);
+
+        }
     }
 }

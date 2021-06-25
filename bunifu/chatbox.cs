@@ -100,7 +100,7 @@ namespace bunifu
             clt.Connect();
             guna2DataGridView1.Location = new Point(richTextBox1.Location.X,richTextBox1.Location.Y-guna2DataGridView1.Height);
         }
-        public void Thongtin(string s,byte[] img,byte[] my_pic,string loai_mes,string name,DataTable data_friend)
+        public void Thongtin(string s,byte[] img,byte[] my_pic,string loai_mes,string name,DataTable data_friend,string trangthai)
         {
             dt_friend = data_friend;
             My_name = name;
@@ -115,6 +115,14 @@ namespace bunifu
                 MemoryStream mem = new MemoryStream(img);
                 guna2CirclePictureBox1.Image =System.Drawing.Image.FromStream(mem);
                 guna2CirclePictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
+                if (trangthai=="off")
+                {
+                    guna2CirclePictureBox2.FillColor = Color.Gray;
+                }    
+                if (trangthai=="on")
+                {
+                    guna2CirclePictureBox2.FillColor = Color.Green;
+                }    
             }
             label1.Text = s;
         }

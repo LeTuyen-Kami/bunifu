@@ -155,6 +155,16 @@ namespace bunifu
                             }
                         }
                     }
+                    if (message.style==5)
+                    {
+                        foreach (DataRow row in datafriend.Rows)
+                        {
+                            if (row["Id"].ToString()==message.id)
+                            {
+                                row["Trangthai"] = message.msg;
+                            }    
+                        }    
+                    }    
                     if (message.style == 10)
                     {
                         DataSet ds = message.ds;
@@ -471,6 +481,10 @@ namespace bunifu
             panel1.BackColor = color;
             if (MessageBox.Show("Are you sure you want to exit?", "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
+                data dt = new data();
+                dt.style = 14;
+                dt.id = Id_M;
+                Send(dt);
                 Application.Exit();
             }
         }
@@ -481,6 +495,10 @@ namespace bunifu
             panel1.BackColor = color;
             if (MessageBox.Show("Do you want to sign out?", "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
+                data dt = new data();
+                dt.style = 14;
+                dt.id = Id_M;
+                Send(dt);
                 Login login = new Login();
                 login.Show();
                 this.Hide();
@@ -562,6 +580,11 @@ namespace bunifu
             this.WindowState = FormWindowState.Minimized;
             if (Min!=null)
                 panelMenu.Controls.Remove(Min);
-        }    
+        }
+
+        private void panelMenu_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
     }
 }

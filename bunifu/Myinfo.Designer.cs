@@ -243,6 +243,8 @@
             this.label7.TabIndex = 16;
             this.label7.Text = "Chỉnh sửa";
             this.label7.Click += new System.EventHandler(this.label7_Click);
+            this.label7.MouseLeave += new System.EventHandler(this.label7_MouseLeave);
+            this.label7.MouseHover += new System.EventHandler(this.label7_MouseHover);
             // 
             // label8
             // 
@@ -254,6 +256,8 @@
             this.label8.TabIndex = 17;
             this.label8.Text = "Chỉnh sửa";
             this.label8.Click += new System.EventHandler(this.label8_Click);
+            this.label8.MouseLeave += new System.EventHandler(this.label8_MouseLeave);
+            this.label8.MouseHover += new System.EventHandler(this.label8_MouseHover);
             // 
             // label9
             // 
@@ -265,6 +269,8 @@
             this.label9.TabIndex = 18;
             this.label9.Text = "Chỉnh sửa";
             this.label9.Click += new System.EventHandler(this.label9_Click);
+            this.label9.MouseLeave += new System.EventHandler(this.label9_MouseLeave);
+            this.label9.MouseHover += new System.EventHandler(this.label9_MouseHover);
             // 
             // label10
             // 
@@ -276,6 +282,8 @@
             this.label10.TabIndex = 19;
             this.label10.Text = "Chỉnh sửa";
             this.label10.Click += new System.EventHandler(this.label10_Click);
+            this.label10.MouseLeave += new System.EventHandler(this.label10_MouseLeave);
+            this.label10.MouseHover += new System.EventHandler(this.label10_MouseHover);
             // 
             // label11
             // 
@@ -287,6 +295,8 @@
             this.label11.TabIndex = 20;
             this.label11.Text = "Chỉnh sửa";
             this.label11.Click += new System.EventHandler(this.label11_Click);
+            this.label11.MouseLeave += new System.EventHandler(this.label11_MouseLeave);
+            this.label11.MouseHover += new System.EventHandler(this.label11_MouseHover);
             // 
             // Id
             // 

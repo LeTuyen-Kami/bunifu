@@ -47,6 +47,7 @@ namespace bunifu
                 byte[] img = new byte[1024*4000];
                 string s = row["Ten"].ToString();
                 string Id = row["Id"].ToString();
+                string Trangthai = row["Trangthai"].ToString();
                 if(row["Img"]!=null)
                 {
                     img = (byte[])row["Img"];
@@ -54,7 +55,7 @@ namespace bunifu
                 if (s != "")
                 {
                     Banbe banbe = new Banbe();
-                    banbe.Addten(s, Id, img,Id_M,0);
+                    banbe.Addten(s, Id, img,Id_M,0,Trangthai);
                     banbe.usercontrol(this);
                     banbe.Dock = DockStyle.Top;
                     panel.Controls.Add(banbe);
@@ -67,14 +68,14 @@ namespace bunifu
             strConnect.ConnectionString = str;
             strConnect.Open();
         }
-        public void showchatbox(string s,byte[] img,string ten,string loai_mes)
+        public void showchatbox(string s,byte[] img,string ten,string loai_mes,string trangthai)
         {
             DataSet ds = new DataSet();
             Id_B = s;
             int width = panel3.Width;
             chat = new chatbox();
             chat.Dock = DockStyle.Fill;
-            chat.Thongtin(ten,img,my_image,loai_mes,My_name,datat);
+            chat.Thongtin(ten,img,my_image,loai_mes,My_name,datat,trangthai);
             chat.IdM(Id_M);
             chat.IdN(s);
             Create_Connect();
@@ -120,30 +121,6 @@ namespace bunifu
                 else
                     chat.addinmessage(message, time, buble.msgtype.In, width, pic,Ten_mes,loainhan,image_send);
             }    
-            //SqlCommand cmd = new SqlCommand(sqll, strConnect);           
-            //SqlDataReader dta = cmd.ExecuteReader();
-            //if (dta.HasRows)
-            //{
-            //    while (dta.Read())
-            //    {
-            //        string message = Decrypt(dta.GetString(3));
-            //        string time = dta.GetString(4);
-            //        int id = dta.GetInt32(1);
-            //        byte[] pic = img;
-            //        if (loai_mes=="1")
-            //        {
-            //            long len = dta.GetBytes(8, 0, null, 0, 0);
-            //            pic = new byte[len];
-            //        }    
-                    
-            //        if (id.ToString() == Id_M)
-            //        {
-            //            chat.addinmessage(message, time, buble.msgtype.Out,width,pic);
-            //        }
-            //        else
-            //            chat.addinmessage(message, time, buble.msgtype.In,width,pic);
-            //    }
-            //}
             strConnect.Close();
             panel3.Controls.Add(chat);
             chat.vertical();
@@ -215,7 +192,7 @@ namespace bunifu
                     string Id = row["Id_nhom"].ToString();
                     byte[] img = new byte[100];
                     Banbe banbe = new Banbe();
-                    banbe.Addten(s, Id, img, Id_M, 2);
+                    banbe.Addten(s, Id, img, Id_M, 2,"");
                     banbe.usercontrol(this);
                     banbe.Dock = DockStyle.Top;
                     panel.Controls.Add(banbe);
@@ -234,6 +211,7 @@ namespace bunifu
                     byte[] img = new byte[1024 * 4000];
                     string s = row["Ten"].ToString();
                     string Id = row["Id"].ToString();
+                    string Trangthai = row["Trangthai"].ToString();
                     if (row["Img"] != null)
                     {
                         img = (byte[])row["Img"];
@@ -241,7 +219,7 @@ namespace bunifu
                     if (s != "")
                     {
                         Banbe banbe = new Banbe();
-                        banbe.Addten(s, Id, img, Id_M, 0);
+                        banbe.Addten(s, Id, img, Id_M, 0,Trangthai);
                         banbe.usercontrol(this);
                         banbe.Dock = DockStyle.Top;
                         panel.Controls.Add(banbe);

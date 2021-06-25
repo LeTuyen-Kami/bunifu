@@ -63,6 +63,7 @@
             this.panelMenu.ShadowDecoration.Parent = this.panelMenu;
             this.panelMenu.Size = new System.Drawing.Size(197, 584);
             this.panelMenu.TabIndex = 2;
+            this.panelMenu.Paint += new System.Windows.Forms.PaintEventHandler(this.panelMenu_Paint);
             this.panelMenu.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panelMenu_MouseDown);
             // 
             // panel1
@@ -109,10 +110,10 @@
             this.guna2Button6.Image = global::bunifu.Properties.Resources.remove_button;
             this.guna2Button6.ImageAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.guna2Button6.ImageOffset = new System.Drawing.Point(10, 0);
-            this.guna2Button6.Location = new System.Drawing.Point(1, 293);
+            this.guna2Button6.Location = new System.Drawing.Point(0, 282);
             this.guna2Button6.Name = "guna2Button6";
             this.guna2Button6.ShadowDecoration.Parent = this.guna2Button6;
-            this.guna2Button6.Size = new System.Drawing.Size(194, 45);
+            this.guna2Button6.Size = new System.Drawing.Size(197, 45);
             this.guna2Button6.TabIndex = 6;
             this.guna2Button6.Text = "Exit";
             this.guna2Button6.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
@@ -131,10 +132,10 @@
             this.guna2Button5.Image = global::bunifu.Properties.Resources.logout;
             this.guna2Button5.ImageAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.guna2Button5.ImageOffset = new System.Drawing.Point(10, 0);
-            this.guna2Button5.Location = new System.Drawing.Point(1, 248);
+            this.guna2Button5.Location = new System.Drawing.Point(0, 237);
             this.guna2Button5.Name = "guna2Button5";
             this.guna2Button5.ShadowDecoration.Parent = this.guna2Button5;
-            this.guna2Button5.Size = new System.Drawing.Size(194, 45);
+            this.guna2Button5.Size = new System.Drawing.Size(197, 45);
             this.guna2Button5.TabIndex = 5;
             this.guna2Button5.Text = "Log out";
             this.guna2Button5.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
@@ -153,10 +154,10 @@
             this.guna2Button3.Image = global::bunifu.Properties.Resources.user_group;
             this.guna2Button3.ImageAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.guna2Button3.ImageOffset = new System.Drawing.Point(10, 0);
-            this.guna2Button3.Location = new System.Drawing.Point(1, 203);
+            this.guna2Button3.Location = new System.Drawing.Point(0, 192);
             this.guna2Button3.Name = "guna2Button3";
             this.guna2Button3.ShadowDecoration.Parent = this.guna2Button3;
-            this.guna2Button3.Size = new System.Drawing.Size(194, 45);
+            this.guna2Button3.Size = new System.Drawing.Size(197, 45);
             this.guna2Button3.TabIndex = 3;
             this.guna2Button3.Text = "Create group";
             this.guna2Button3.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
@@ -175,10 +176,10 @@
             this.guna2Button4.Image = global::bunifu.Properties.Resources.friends__1_;
             this.guna2Button4.ImageAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.guna2Button4.ImageOffset = new System.Drawing.Point(10, 0);
-            this.guna2Button4.Location = new System.Drawing.Point(1, 158);
+            this.guna2Button4.Location = new System.Drawing.Point(0, 147);
             this.guna2Button4.Name = "guna2Button4";
             this.guna2Button4.ShadowDecoration.Parent = this.guna2Button4;
-            this.guna2Button4.Size = new System.Drawing.Size(194, 45);
+            this.guna2Button4.Size = new System.Drawing.Size(197, 45);
             this.guna2Button4.TabIndex = 2;
             this.guna2Button4.Text = "Friend";
             this.guna2Button4.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
@@ -198,10 +199,10 @@
             this.guna2Button1.Image = global::bunifu.Properties.Resources.home;
             this.guna2Button1.ImageAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.guna2Button1.ImageOffset = new System.Drawing.Point(10, 0);
-            this.guna2Button1.Location = new System.Drawing.Point(1, 68);
+            this.guna2Button1.Location = new System.Drawing.Point(0, 57);
             this.guna2Button1.Name = "guna2Button1";
             this.guna2Button1.ShadowDecoration.Parent = this.guna2Button1;
-            this.guna2Button1.Size = new System.Drawing.Size(194, 45);
+            this.guna2Button1.Size = new System.Drawing.Size(197, 45);
             this.guna2Button1.TabIndex = 0;
             this.guna2Button1.Text = "Home";
             this.guna2Button1.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
@@ -220,10 +221,10 @@
             this.guna2Button2.Image = global::bunifu.Properties.Resources.notification__1_;
             this.guna2Button2.ImageAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.guna2Button2.ImageOffset = new System.Drawing.Point(10, 0);
-            this.guna2Button2.Location = new System.Drawing.Point(1, 113);
+            this.guna2Button2.Location = new System.Drawing.Point(0, 102);
             this.guna2Button2.Name = "guna2Button2";
             this.guna2Button2.ShadowDecoration.Parent = this.guna2Button2;
-            this.guna2Button2.Size = new System.Drawing.Size(194, 45);
+            this.guna2Button2.Size = new System.Drawing.Size(197, 45);
             this.guna2Button2.TabIndex = 1;
             this.guna2Button2.Text = "Notification";
             this.guna2Button2.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;

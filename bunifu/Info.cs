@@ -30,7 +30,7 @@ namespace bunifu
         public Info(Color color)
         {
             InitializeComponent();
-            label1.BackColor = color;
+            label10.BackColor = color;
         }
         void Connect()
         {

@@ -19,6 +19,7 @@ namespace bunifu
         byte[] image;
         UserControl control;
         Color Tile_color;
+        string Trangthai;
         public Banbe()
         {
             InitializeComponent();
@@ -28,18 +29,27 @@ namespace bunifu
             InitializeComponent();
             Tile_color = color;
         }
-        public void Addten(string s,string Id,byte[] img,string my_id,int loai)
+        public void Addten(string s,string Id,byte[] img,string my_id,int loai,string trangthai)
         {
             guna2Button1.Text = s;
             Id_M = my_id;
             Id_ban = Id;
             phanloai = loai;
+            Trangthai = trangthai;
             if (loai != 2)
             {
                 image = img;
                 MemoryStream mem = new MemoryStream(img);
                 guna2CirclePictureBox1.Image =System.Drawing.Image.FromStream(mem);
                 guna2CirclePictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
+                if (trangthai=="off")
+                {
+                    guna2CirclePictureBox2.FillColor = Color.Gray;
+                }    
+                if (trangthai=="on")
+                {
+                    guna2CirclePictureBox2.FillColor = Color.Green;
+                }    
             }
             else
             {
@@ -63,12 +73,12 @@ namespace bunifu
             if (phanloai==0)
             {
                 Danhsach_tinnhan tam = control as Danhsach_tinnhan;
-                tam.showchatbox(Id_ban, image, guna2Button1.Text,"0");
+                tam.showchatbox(Id_ban, image, guna2Button1.Text,"0",Trangthai);
             } 
             if (phanloai==2)
             {
                 Danhsach_tinnhan tam = control as Danhsach_tinnhan;
-                tam.showchatbox(Id_ban, image, guna2Button1.Text, "1");
+                tam.showchatbox(Id_ban, image, guna2Button1.Text, "1",Trangthai);
             }    
         }
         public void usercontrol(UserControl userControl)

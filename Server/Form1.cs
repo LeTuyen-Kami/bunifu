@@ -156,6 +156,8 @@ namespace Server
                     //Đăng nhập
                     if (message.style == 1)
                     {
+                        data dt = new data();
+                        int Id=0;
                         Create_Connect();
                         string sqll = "select Id from Account where Taikhoan='" + message.tk + "' and Matkhau='" + message.mk + "'";
                         SqlCommand cmd = new SqlCommand(sqll, strConnect);
@@ -163,7 +165,7 @@ namespace Server
                         if (dta.Read() == true)
                         {
                             int IdIndex = dta.GetOrdinal("Id");
-                            int Id = dta.GetInt32(IdIndex);
+                            Id = dta.GetInt32(IdIndex);
                             client.Send(Serialize(Id.ToString()));
                         }
                         else
@@ -171,8 +173,30 @@ namespace Server
                             int temp = 0;
                             client.Send(Serialize(temp.ToString()));
                         }
+                        dta.Close();
+                        if (Id!=0)
+                        {
+                            sqll = "update Account set Trangthai='on' where Id='"+Id+"'";
+                            cmd.CommandText = sqll;
+                            cmd.ExecuteNonQuery();
+                        }                       
                         strConnect.Close();
-                        //strConnect.Dispose();
+                        if (Id!=0)
+                        {
+                            dt.id = Id.ToString();
+                            dt.msg = "on";
+                            dt.style = 5;
+                            this.BeginInvoke((MethodInvoker)delegate ()
+                            {
+                                foreach (Socket item in clientList)
+                                {
+                                    if (item != null)
+                                    {
+                                        item.Send(Serialize(dt));
+                                    }
+                                }
+                            });
+                        }                                               
                     }
                     //Tạo tài khoản
                     if (message.style == 2)
@@ -184,8 +208,8 @@ namespace Server
                         }
                         else {
                             Create_Connect();
-                            string sql = "Insert into Account (Taikhoan, Matkhau, Ten,Ngaytao,Img) "
-                                                             + " values (@tk, @mk, @ten,@nt,@img) ";
+                            string sql = "Insert into Account (Taikhoan, Matkhau, Ten,Ngaytao,Img,Trangthai) "
+                                                             + " values (@tk, @mk, @ten,@nt,@img,@tt) ";
                             SqlCommand cmd = strConnect.CreateCommand();
                             cmd.CommandText = sql;
                             SqlParameter gradeParam = new SqlParameter("@tk", SqlDbType.NVarChar);
@@ -197,6 +221,7 @@ namespace Server
                             string s = now.Day.ToString() + "/" + now.Month + "/" + now.Year;
                             cmd.Parameters.Add("@nt", SqlDbType.NVarChar).Value = s;
                             cmd.Parameters.Add("@img", SqlDbType.Image).Value = message.img;
+                            cmd.Parameters.Add("@tt", SqlDbType.NVarChar).Value = "on";
                             cmd.ExecuteNonQuery();
                             int temp = 0;
                             client.Send(Serialize(temp.ToString()));
@@ -211,7 +236,7 @@ namespace Server
                         DataSet ds = new DataSet();
                         dt.style = 10;
                         Create_Connect();
-                        string sqll = "select Account.Ten,Account.Id,Account.Img from Account,Friend where Friend.Id_M='"+message.id_send+"' and Friend.Id_N=Account.Id or Friend.Id_N='"+message.id_send+"' and Friend.Id_M=Account.Id";
+                        string sqll = "select Account.Ten,Account.Id,Account.Img,Account.Trangthai from Account,Friend where Friend.Id_M='"+message.id_send+"' and Friend.Id_N=Account.Id or Friend.Id_N='"+message.id_send+"' and Friend.Id_M=Account.Id";
                         SqlDataAdapter adapter = new SqlDataAdapter(sqll, strConnect);
                         adapter.Fill(ds,"ban");
                         sqll = "select * from Account where Id='" + message.id_send + "'";
@@ -508,9 +533,30 @@ namespace Server
                                     }
                                 }
                             });
-                        }
-                        
-
+                        }                       
+                    } 
+                    if (message.style==14)
+                    {
+                        data dt = new data();
+                        dt.style = 5;
+                        dt.msg = "off";
+                        dt.id = message.id;
+                        Create_Connect();
+                        string sql = "update Account set Trangthai='off' where Id='" + message.id + "'";
+                        SqlCommand cmd = new SqlCommand(sql, strConnect);
+                        cmd.ExecuteNonQuery();
+                        strConnect.Close();
+                        clientList.Remove(client);
+                        this.BeginInvoke((MethodInvoker)delegate ()
+                        {
+                            foreach (Socket item in clientList)
+                            {
+                                if (item != null)
+                                {
+                                    item.Send(Serialize(dt));
+                                }
+                            }
+                        });
                     }    
                 }
             }
