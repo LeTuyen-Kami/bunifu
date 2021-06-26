@@ -23,6 +23,7 @@ namespace bunifu
         DataTable dataid;
         DataTable data;
         string Id_M;
+        string My_name = "";
         public Taonhom()
         {
 
@@ -135,8 +136,9 @@ namespace bunifu
             //chuyển đổi dữ liệu và lưu lại kết quả 
             return formatter.Deserialize(stream);
         }
-        public void nhap(DataTable dt,string id)
+        public void nhap(DataTable dt,string id,string name)
         {
+            My_name = name;
             Id_M = id;
             dataTable = dt;
         }
@@ -171,7 +173,8 @@ namespace bunifu
                     DataSet ds = new DataSet();
                     tam.Rows.Add(Id_M);
                     ds.Tables.Add(tam);
-
+                    dt.id = Id_M;
+                    dt.ten = My_name;
                     dt.ds = ds;
                     dt.msg = guna2TextBox1.Text.Trim();
                     dt.style = 13;

@@ -22,7 +22,7 @@ namespace bunifu
         string loaimes;
         string My_name;
         byte[] my_img;
-        string path_image;
+        string TenNhom;
         DataTable dt_friend;
         DataTable dt_send=new DataTable();
         public chatbox()
@@ -89,27 +89,39 @@ namespace bunifu
                 }
             }
             bb_old = bb1;
-            panel1.VerticalScroll.Value = panel1.VerticalScroll.Maximum;
+            panel1.VerticalScroll.Value = panel1.VerticalScroll.Maximum;        
         }
         private void chatbox_Load(object sender, EventArgs e)
         {
             dt_send.Columns.Add("Ten");
             dt_send.Columns.Add("Id");
+  
             //bunifuImageButton1.Enabled = false;
             bunifuImageButton1.BringToFront();
             clt.Connect();
-            guna2DataGridView1.Location = new Point(richTextBox1.Location.X,richTextBox1.Location.Y-guna2DataGridView1.Height);
+            guna2DataGridView1.BringToFront();
+            panel1.Controls.Add(guna2DataGridView1);
         }
-        public void Thongtin(string s,byte[] img,byte[] my_pic,string loai_mes,string name,DataTable data_friend,string trangthai)
+        public void Thongtin(string s,byte[] img,byte[] my_pic,string loai_mes,string name,DataTable data_friend,string trangthai,string Ten_nhom)
         {
+            TenNhom = Ten_nhom;
             dt_friend = data_friend;
+            dt = new DataTable();
+            dt.Columns.Add("Ten");
+            dt_id.Columns.Add("Id");
+            foreach (DataRow row in data_friend.Rows)
+            {
+                dt.Rows.Add(row["Ten"]);
+                dt_id.Rows.Add(row["Id"]);
+            }    
             My_name = name;
             loaimes = loai_mes;
             my_img = my_pic;
             if (loai_mes=="1")
             {
                 guna2CirclePictureBox1.Visible = false;
-            }    
+                guna2CirclePictureBox2.Visible = false;
+            }
             if (loai_mes!="1")
             {
                 MemoryStream mem = new MemoryStream(img);
@@ -137,18 +149,29 @@ namespace bunifu
             string s = now.Day.ToString() + "/" + now.Month + " " + now.Hour.ToString() + ":" + now.Minute.ToString() + ":" + now.Second.ToString();
             addinmessage(richTextBox1.Text, s, buble.msgtype.Out, left_mes, new byte[100], "", "0", null);
             panel1.VerticalScroll.Value = panel1.VerticalScroll.Maximum;
-
+            DataTable tam = new DataTable("Tag");
+            tam.Columns.Add("Ten");
+            tam.Columns.Add("Id");
             data dt = new data();
             dt.ten = My_name;
+            dt.tk = TenNhom;
             dt.msg = Encrypt(richTextBox1.Text);
             dt.id_recv = Int32.Parse(Id_N);
             dt.id_send = Int32.Parse(Id_M);
             dt.time = s;
+            if (dt_send.Rows.Count > 0)
+            {
+                foreach (DataRow row in dt_send.Rows)
+                {
+                    if (richTextBox1.Text.Contains(row["Ten"].ToString()))
+                        tam.Rows.Add(new object[] { row["Ten"], row["Id"] });
+                }
+                dt.ds.Tables.Add(tam);
+            }
             dt.img = my_img;
             dt.loai_mes = loaimes;
             dt.loai_nhan = "0";
             clt.Send(dt);
-
         }
         public void IdM(string id)
         {
@@ -199,7 +222,7 @@ namespace bunifu
             {
                 bunifuImageButton1.Image = new Bitmap(@"like.png");
             }    
-            if (richTextBox1.Text.Contains("@"))
+            if (richTextBox1.Text.Contains("@")&&loaimes=="1")
             {
                 if (b > 0)
                 {
@@ -211,7 +234,7 @@ namespace bunifu
                     dt.Columns.Add("Ten");
                     foreach (DataRow row in dt_friend.Rows)
                     {
-                        if (row["Ten"].ToString().StartsWith(s))
+                        if (row["Ten"].ToString().ToLower().StartsWith(s))
                         {
                             dt.Rows.Add(row["Ten"].ToString());
                             dt_id.Rows.Add(row["Id"].ToString());
@@ -219,6 +242,11 @@ namespace bunifu
                     }
                     guna2DataGridView1.DataSource = dt;
                     richTextBox1.Select(vitri + 1 + b, 0);
+                    guna2DataGridView1.Size = new Size(guna2DataGridView1.Width,
+                        (guna2DataGridView1.RowCount) * guna2DataGridView1.RowTemplate.Height);
+                    guna2DataGridView1.Top = bb_old.Bottom;
+                    guna2DataGridView1.Visible = true;
+                    panel1.VerticalScroll.Value = panel1.VerticalScroll.Maximum;
                 }
             }
             else
@@ -300,15 +328,18 @@ namespace bunifu
         private void richTextBox1_KeyPress(object sender, KeyPressEventArgs e)
         {
             dem();
-            if (e.KeyChar == 64)
+            if (e.KeyChar == 64&&loaimes=="1")
             {
                 //check_ = 1;
                 b = 0;
-                vitri = richTextBox1.Text.Count();
+                vitri = richTextBox1.Text.Count();              
                 guna2DataGridView1.Visible = true;
-                guna2DataGridView1.DataSource = dt_friend;
+                guna2DataGridView1.DataSource = dt;
+                guna2DataGridView1.Size = new Size(guna2DataGridView1.Width,
+                            guna2DataGridView1.RowCount * guna2DataGridView1.RowTemplate.Height);
+                guna2DataGridView1.Top = bb_old.Bottom;
             }
-            if (e.KeyChar == 8)
+            if (e.KeyChar == 8&&loaimes=="1")
             {
                 if ((richTextBox1.SelectionStart > vitri && richTextBox1.SelectionStart < vitri_cuoi - 1) && check_ == 1)
                 {
@@ -328,8 +359,8 @@ namespace bunifu
         int vitri_cuoi = 0; 
         int check_ = 0;
         int vitri = 0;
-        DataTable dt;
-        DataTable dt_id;
+        DataTable dt = new DataTable();
+        DataTable dt_id=new DataTable();
         private void guna2DataGridView1_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
             check_ = 1;

@@ -157,6 +157,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="About.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="About.Designer.cs">
+      <DependentUpon>About.cs</DependentUpon>
+    </Compile>
     <Compile Include="Banbe.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -182,6 +188,12 @@
     </Compile>
     <Compile Include="Danhsach_tinnhan.Designer.cs">
       <DependentUpon>Danhsach_tinnhan.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forgot_pass.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forgot_pass.Designer.cs">
+      <DependentUpon>Forgot_pass.cs</DependentUpon>
     </Compile>
     <Compile Include="Friend.cs">
       <SubType>UserControl</SubType>
@@ -258,6 +270,9 @@
     <Compile Include="UI.Designer.cs">
       <DependentUpon>UI.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="About.resx">
+      <DependentUpon>About.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Banbe.resx">
       <DependentUpon>Banbe.cs</DependentUpon>
     </EmbeddedResource>
@@ -269,6 +284,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Danhsach_tinnhan.resx">
       <DependentUpon>Danhsach_tinnhan.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forgot_pass.resx">
+      <DependentUpon>Forgot_pass.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Friend.resx">
       <DependentUpon>Friend.cs</DependentUpon>
@@ -369,6 +387,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="icon.ico" />
+    <None Include="Resources\gmail.png" />
+    <None Include="Resources\information.png" />
     <None Include="Resources\like1.png" />
     <None Include="Resources\remove-button.png" />
     <None Include="Resources\logout.png" />

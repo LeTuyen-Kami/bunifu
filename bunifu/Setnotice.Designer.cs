@@ -28,23 +28,13 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.noctice1 = new bunifu.Noctice();
+            this.components = new System.ComponentModel.Container();
             this.panel1 = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
+            this.noctice1 = new bunifu.Noctice();
+            this.bunifuDragControl1 = new Bunifu.Framework.UI.BunifuDragControl(this.components);
             this.panel1.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // noctice1
-            // 
-            this.noctice1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
-            this.noctice1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.noctice1.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.noctice1.Location = new System.Drawing.Point(0, 0);
-            this.noctice1.Name = "noctice1";
-            this.noctice1.Size = new System.Drawing.Size(871, 93);
-            this.noctice1.TabIndex = 1;
-            this.noctice1.Visible = false;
-            this.noctice1.Load += new System.EventHandler(this.noctice1_Load);
             // 
             // panel1
             // 
@@ -67,6 +57,25 @@
             this.label1.Text = "NOTIFICATION";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // noctice1
+            // 
+            this.noctice1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
+            this.noctice1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.noctice1.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.noctice1.Location = new System.Drawing.Point(0, 0);
+            this.noctice1.Name = "noctice1";
+            this.noctice1.Size = new System.Drawing.Size(871, 93);
+            this.noctice1.TabIndex = 1;
+            this.noctice1.Visible = false;
+            this.noctice1.Load += new System.EventHandler(this.noctice1_Load);
+            // 
+            // bunifuDragControl1
+            // 
+            this.bunifuDragControl1.Fixed = true;
+            this.bunifuDragControl1.Horizontal = true;
+            this.bunifuDragControl1.TargetControl = this.label1;
+            this.bunifuDragControl1.Vertical = true;
+            // 
             // Setnotice
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -85,5 +94,6 @@
         private Noctice noctice1;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label label1;
+        private Bunifu.Framework.UI.BunifuDragControl bunifuDragControl1;
     }
 }

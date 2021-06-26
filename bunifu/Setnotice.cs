@@ -57,6 +57,12 @@ namespace bunifu
                     {
                         noctice.Addnotice("Bạn", ", đã từ chối lời mời kết bạn của " + value_ten, value_readed,1);
                     }
+                    if (value_status!="Wait"&&value_status!="Accept"&&value_status!="Refuse")
+                    {
+                        value_status = value_status.Replace("N", "");
+                        value_status = value_status.Replace("'", "");
+                        noctice.Addnotice(value_ten,value_status, value_readed, 1);
+                    }    
                     noctice.Size = noctice1.Size;
                     noctice.Dock = DockStyle.Top;
                     this.Controls.Add(noctice);

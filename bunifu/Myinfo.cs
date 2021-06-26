@@ -19,18 +19,130 @@ namespace bunifu
 {
     public partial class Myinfo : UserControl
     {
-        ClienT clienT = new ClienT();
         DataTable Data = new DataTable();
         public Myinfo()
         {
             InitializeComponent();
-            clienT.Connect();
+            Connect();
+            this.Font = new Font(label7.Font.Name, 10, FontStyle.Regular);
         }
         public Myinfo(Color color)
         {
             InitializeComponent();
-            clienT.Connect();
+            Connect();
             label14.BackColor = color;
+            this.Font = new Font(label7.Font.Name, 10, FontStyle.Regular);
+            panel1.Size = new Size(this.Width, 57);
+        }
+        IPEndPoint IP;
+        Socket client;
+        public bool isconnect;
+        private void bunifuDataGridView1_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            //guna2TextBox1.Text = bunifuDataGridView1[e.ColumnIndex, e.RowIndex].Value.ToString();
+            //bunifuDataGridView1.Visible = false;
+        }
+        int a = 1;
+        void Connect()
+        {
+            //IP là địa chỉ của server.Khởi tạo địa chỉ IP và socket để kết nối
+            IP = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 1997);
+            client = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.IP);
+            //bắt đầu kết nôi. Nếu ko kết nối được thì hiện thông báo
+            try
+            {
+                client.Connect(IP);
+                isconnect = client.Connected;
+            }
+            catch
+            {
+                MessageBox.Show("Lỗi kết nối", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            //tạo luồng lắng nghe server khi vừa kết nối tới
+            Thread listen = new Thread(Receive);
+            listen.IsBackground = true;
+            listen.Start();
+        }
+        void close()
+        {
+            if (isconnect)
+                client.Close();
+        }
+        void Send(data dt)
+        {
+            client.Send(Serialize(dt));
+        }
+        void Receive()
+        {
+            try
+            {
+                while (true)
+                {
+                    //khai báo mảng byte để nhận dữ liệu dưới mảng byte
+                    byte[] datat = new byte[1024 * 5000];
+                    client.Receive(datat);
+                    //chuyển data từ dạng byte sang dạng string
+                    data dt = (data)Deseriliaze(datat);
+                    this.BeginInvoke((MethodInvoker)delegate ()
+                    {
+                        if (label13.Visible == false)
+                            label13.Visible = true;
+                    });
+                    if (dt.style == 0)
+                    {
+                        label13.Text = "Account or name has been duplicated!";                       
+                    }
+                    if (dt.style == 1)
+                    {
+                        label13.Text = "Email has been duplicated!";
+                    }
+                    if (dt.style == 2)
+                    {
+                        panel1.Size = new Size(this.Width, 57);
+
+                        none no = (none)(this.ParentForm);
+                        no.changeImage(pictureBox1.Image);
+                        Data.Rows[0]["Matkhau"] = Encrypt(Matkhau.Text);
+                        Data.Rows[0]["Sex"] = Gt.Text;
+                        Data.Rows[0]["Ngaysinh"] = Ns.Text;
+                        Data.Rows[0]["Img"] = dt.img;
+                        Data.Rows[0]["Ten"] = Ten.Text;
+                        Data.Rows[0]["Taikhoan"] = Taikhoan.Text;
+                        Data.Rows[0]["Email"] = email.Text;
+                        no.recvdata(Data);
+                        label13.Text = "Update successful!";
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                //MessageBox.Show(e.Message);
+                //close();
+            }
+        }
+        byte[] Serialize(object obj)
+        {
+            //khởi tạo stream để lưu các byte phân mảnh
+            MemoryStream stream = new MemoryStream();
+            //khởi tạo đối tượng BinaryFormatter để phân mảnh dữ liệu sang kiểu byte
+            BinaryFormatter formatter = new BinaryFormatter();
+            //phân mảnh rồi ghi vào stream
+            formatter.Serialize(stream, obj);
+            //từ stream chuyển các các byte thành dãy rồi cbi gửi đi
+            return stream.ToArray();
+        }
+
+        //Hàm gom mảnh các byte nhận được rồi chuyển sang kiểu string để hiện thị lên màn hình
+        object Deseriliaze(byte[] data)
+        {
+            //khởi tạo stream đọc kết quả của quá trình phân mảnh 
+            MemoryStream stream = new MemoryStream(data);
+            //khởi tạo đối tượng chuyển đổi
+            BinaryFormatter formatter = new BinaryFormatter();
+            //chuyển đổi dữ liệu và lưu lại kết quả 
+            return formatter.Deserialize(stream);
         }
         string Id_M;      
         int temp = 0;
@@ -62,7 +174,8 @@ namespace bunifu
             Gt.Text = Data.Rows[0][5].ToString();
             Ns.Text = Data.Rows[0][6].ToString();
             Nt.Text = Data.Rows[0][7].ToString();
-            MemoryStream mem = new MemoryStream((byte[])Data.Rows[0][4]);
+            email.Text = Data.Rows[0]["Email"].ToString();
+            MemoryStream mem = new MemoryStream((byte[])Data.Rows[0]["Img"]);
             pictureBox1.Image =System.Drawing.Image.FromStream(mem);
             pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
             Id.ReadOnly = true;
@@ -72,6 +185,7 @@ namespace bunifu
             Gt.ReadOnly = true;
             Ns.ReadOnly = true;
             Nt.ReadOnly = true;
+            email.ReadOnly = true;
         }
         private void pictureBox1_Click(object sender, EventArgs e)
         {
@@ -129,6 +243,8 @@ namespace bunifu
             }
             if (Ten.Text != "" && Taikhoan.Text != "" && Matkhau.Text != "")
             {
+                if (label13.Visible==true)
+                    label13.Visible = false;
                 if ((int)checkpass(Matkhau.Text) < 3)
                 {
                     label12.Text = "Password is too weak";
@@ -138,54 +254,71 @@ namespace bunifu
                 {
                     if (jpegByteSize < 1000000)
                     {
-                        try
+                        if (IsValidEmail(email.Text))
                         {
-                            
-                            data dt = new data();
-                            string ten = Ten.Text;
-                            string tk = Taikhoan.Text;
-                            string mk = Encrypt(Matkhau.Text);
-                            string gt = Gt.Text;
-                            string ngaysinh = Ns.Text;
-                            dt.ten = ten;
-                            dt.tk = tk;
-                            dt.mk = mk;
-                            dt.id = Id_M;
-                            dt.ngaysinh = ngaysinh;
-                            dt.sex = gt;
-                            MemoryStream mem = new MemoryStream();
-                            pictureBox1.Image.Save(mem, pictureBox1.Image.RawFormat);
-                            dt.img = mem.ToArray();                                            
-                            dt.style = 5;
-                            clienT.Send(dt);
-                            none no = (none)(this.ParentForm);
-                            no.changeImage(pictureBox1.Image);
-                            Data.Rows[0]["Ten"] = Ten.Text;
-                            Data.Rows[0]["Taikhoan"] = Taikhoan.Text;
-                            Data.Rows[0]["Matkhau"] = Encrypt(Matkhau.Text);
-                            Data.Rows[0]["Sex"] = Gt.Text;
-                            Data.Rows[0]["Ngaysinh"] = Ns.Text;
-                            Data.Rows[0]["Img"] = dt.img;
-                            no.recvdata(Data);
+                            try
+                            {
+
+                                data dt = new data();
+                                string ten = Ten.Text;
+                                string tk = Taikhoan.Text;
+                                string mk = Encrypt(Matkhau.Text);
+                                string gt = Gt.Text;
+                                string ngaysinh = Ns.Text;
+                                string Email = email.Text;
+                                dt.ten = ten;
+                                dt.email = Email;
+                                dt.tk = tk;
+                                dt.mk = mk;
+                                dt.id = Id_M;
+                                dt.ngaysinh = ngaysinh;
+                                dt.sex = gt;
+                                MemoryStream mem = new MemoryStream();
+                                pictureBox1.Image.Save(mem, pictureBox1.Image.RawFormat);
+                                dt.img = mem.ToArray();
+                                dt.style = 5;
+                                Send(dt);
+                                
+                            }
+                            catch { }
                         }
-                        catch { }
+                        else
+                        {
+                            label13.Text = "This email is not valid!";
+                            if (label13.Visible == false)
+                                label13.Visible = true;
+                        }    
                     }
                     else
                     {
-                        label13.Text = "Hình ảnh có dung lượng quá lớn";
-                        label13.Visible = true;
+                        label13.Text = "The image size is too large";
+                        if (label13.Visible == false)
+                            label13.Visible = true;
                     }
                 }
             }
             else
             {
                 label13.Text = "Please fill it out completely";
-                label13.Visible = true;
+                if (label13.Visible == false)
+                    label13.Visible = true;
             }
         }
         public void RId(string id)
         {
             Id_M = id;
+        }
+        bool IsValidEmail(string email)
+        {
+            try
+            {
+                var addr = new System.Net.Mail.MailAddress(email);
+                return addr.Address == email;
+            }
+            catch
+            {
+                return false;
+            }
         }
         public static string Encrypt(string toEncrypt)
         {
@@ -345,6 +478,21 @@ namespace bunifu
         {
             label11.Font = new Font(this.Font, FontStyle.Regular);
 
+        }
+
+        private void label16_MouseHover(object sender, EventArgs e)
+        {
+            label16.Font = new Font(this.Font, FontStyle.Underline);
+        }
+
+        private void label16_MouseLeave(object sender, EventArgs e)
+        {
+            label16.Font = new Font(this.Font, FontStyle.Regular);
+        }
+
+        private void label16_Click(object sender, EventArgs e)
+        {
+            email.ReadOnly = false;
         }
     }
 }

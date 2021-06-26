@@ -53,8 +53,9 @@ namespace bunifu
             }
             else
             {
+                guna2CirclePictureBox2.Visible = false;
                 guna2CirclePictureBox1.Visible = false;
-                guna2Button1.TextAlign = HorizontalAlignment.Center;
+                guna2Button1.TextAlign = HorizontalAlignment.Right;
             }
         }
         public void Esclip()
@@ -73,12 +74,12 @@ namespace bunifu
             if (phanloai==0)
             {
                 Danhsach_tinnhan tam = control as Danhsach_tinnhan;
-                tam.showchatbox(Id_ban, image, guna2Button1.Text,"0",Trangthai);
+                tam.showchatbox(Id_ban, image, guna2Button1.Text,"0",Trangthai,guna2Button1.Text);
             } 
             if (phanloai==2)
             {
                 Danhsach_tinnhan tam = control as Danhsach_tinnhan;
-                tam.showchatbox(Id_ban, image, guna2Button1.Text, "1",Trangthai);
+                tam.showchatbox(Id_ban, image, guna2Button1.Text, "1",Trangthai,guna2Button1.Text);
             }    
         }
         public void usercontrol(UserControl userControl)

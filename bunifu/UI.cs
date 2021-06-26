@@ -41,7 +41,7 @@ namespace bunifu
             InitializeComponent();
             CheckForIllegalCrossThreadCalls = false;//tránh việc đụng độ khi sử dụng tài nguyên giữa các thread
             random = new Random();
-            listbutton = new List<Guna2Button>() {guna2Button1,guna2Button2,guna2Button3,guna2Button4,guna2Button5,guna2Button6 };
+            listbutton = new List<Guna2Button>() {guna2Button1,guna2Button2,guna2Button3,guna2Button4,guna2Button5,guna2Button6,guna2Button7 };
             this.ControlBox = false;
         }
         public void Id(string id)
@@ -98,22 +98,7 @@ namespace bunifu
                             DataSet ds = message.ds;
                             guna2Button2.Image = new Bitmap(@"notification.png");
                             dataTable2 = ds.Tables["ketban"];
-                        }
-
-                        //if (message.id_recv.ToString() == Id_M)
-                        //    message.id_recv = message.id_send;
-                        //this.BeginInvoke((MethodInvoker)delegate ()
-                        //{
-                        //    Guna2Button button = new Guna2Button();
-                        //    button.Location = but_old.Location;
-                        //    button.Size = guna2Button3.Size;
-                        //    //button.Dock = DockStyle.Top;
-                        //    button.Top = but_old.Bottom;
-                        //    button.Text = message.id_recv.ToString();
-                        //    button.Click += new EventHandler(guna2Button3_Click);
-                        //    panel3.Controls.Add(button);
-                        //    but_old = button;
-                        //});
+                        }                     
                     }
                     if (message.style == 2)
                     {
@@ -150,6 +135,11 @@ namespace bunifu
                         {
                             if (row["Id"].ToString() == Id_M)
                             {
+                                if (message.tk!=My_name)
+                                {
+                                    guna2Button2.Image = new Bitmap(@"notification.png");
+                                    dataTable2.Rows.Add(new object[] { message.ngaysinh, 99999999, Id_M, message.tk, 0 });
+                                }                          
                                 data_nhom.Rows.Add(new object[] { message.id, message.ten });
                                 break;
                             }
@@ -196,11 +186,20 @@ namespace bunifu
                             }
                             if (message.loai_mes == "1")
                             {
-                                if (check_have(message.id_recv.ToString()))
+                                if (check_have(message.id_recv.ToString())!="")
                                 {
                                     danhsach.add_mes(message, 1);
                                 }
                             }
+                            if (message.ds.Tables["Tag"].Rows.Count>0&& check_have(message.id_recv.ToString())!="")
+                                foreach (DataRow row in message.ds.Tables["Tag"].Rows)
+                                {
+                                    if (row["Id"].ToString() == Id_M)
+                                    {
+                                        guna2Button2.Image = new Bitmap(@"notification.png");
+                                        dataTable2.Rows.Add(new object[] { message.tk,99999999, Id_M, message.ten, 0 });
+                                    }
+                                }    
                         });
                     }
                 }
@@ -232,10 +231,6 @@ namespace bunifu
             BinaryFormatter formatter = new BinaryFormatter();
             //chuyển đổi dữ liệu và lưu lại kết quả 
             return formatter.Deserialize(stream);
-        }
-        private void chatbox1_Load_1(object sender, EventArgs e)
-        {
-
         }
         private void none_Load(object sender, EventArgs e)
         {
@@ -392,20 +387,7 @@ namespace bunifu
         public void changeImage(System.Drawing.Image image)
         {
             guna2CirclePictureBox1.Image = image;
-        }
-        //public void unfriend(string id)
-        //{
-        //    int i = 0;
-        //    foreach(DataRow row in datafriend.Rows)
-        //    {
-        //        if (row["Id"].ToString() == id)
-        //        {
-        //            datafriend.Rows.RemoveAt(i);
-        //            return;
-        //        }
-        //        i++;
-        //    }    
-        //}
+        }      
         private void guna2Button4_Click(object sender, EventArgs e)
         {
             if (activeForm != null)
@@ -443,14 +425,14 @@ namespace bunifu
                 }
             }
         }
-        public bool check_have(string s)
+        public string check_have(string s)
         {
             foreach (DataRow row in data_nhom.Rows)
             {
                 if (s == row["Id_nhom"].ToString())
-                    return true;
+                    return row["Tennhom"].ToString();
             }
-            return false;
+            return "";
         }
         private void guna2Button1_Click(object sender, EventArgs e)
         {
@@ -471,7 +453,7 @@ namespace bunifu
             Color color = ActivateButton(sender);
             panel1.BackColor = color;
             Taonhom taonhom = new Taonhom(color);
-            taonhom.nhap(datafriend, Id_M);
+            taonhom.nhap(datafriend, Id_M,My_name);
             taonhom.ShowDialog();
         }
 
@@ -585,6 +567,19 @@ namespace bunifu
         private void panelMenu_Paint(object sender, PaintEventArgs e)
         {
 
+        }
+
+        private void guna2Button7_Click(object sender, EventArgs e)
+        {
+            if (activeForm != null)
+                panel4.Controls.Remove(activeForm);
+            Color color = ActivateButton(sender);
+            panel1.BackColor = color;
+            About about = new About(color);
+            activeForm = about;
+            panel4.Controls.Add(about);
+            about.Dock = DockStyle.Fill;
+            about.BringToFront();
         }
     }
 }

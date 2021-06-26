@@ -7,8 +7,10 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Mail;
 using System.Net.Sockets;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -126,6 +128,8 @@ namespace Server
                         dt.loai_mes = message.loai_mes;
                         dt.loai_nhan = message.loai_nhan;
                         dt.id_send = message.id_send;
+                        dt.tk ="N', đã nhắc đến bạn trong nhóm "+ message.tk+"'";
+                        dt.ds = message.ds;
                         Create_Connect();
                         string sql = "Insert into Message (Id_S, Id_R, Message,Time,Loai_mes,Loai_nhan,Data_byte) "
                                                          + " values (@s, @r, @msg,@time,@lm,@ln,@dtb) ";
@@ -139,18 +143,30 @@ namespace Server
                         cmd.Parameters.Add("@ln", SqlDbType.NVarChar).Value = message.loai_nhan;
                         cmd.Parameters.Add("@dtb", SqlDbType.Image).Value = message.image;
                         cmd.ExecuteNonQuery();
-                        
-                        strConnect.Close();
-                        this.BeginInvoke((MethodInvoker)delegate ()
+                        if (message.ds.Tables["Tag"].Rows.Count > 0)
                         {
-                            foreach (Socket item in clientList)
+                            foreach (DataRow row in message.ds.Tables["Tag"].Rows)
                             {
-                                if (item != null && item != client)
+                                sql="Insert into Ketban (Nguoigui,Nguoinhan,Status,Readed) values ("+dt.id_send+","+row["Id"]+ ","+dt.tk+","+0+")";
+                                cmd.CommandText = sql;
+                                cmd.ExecuteNonQuery();
+                            }    
+                        }
+                        strConnect.Close();
+                        try
+                        {
+                            this.BeginInvoke((MethodInvoker)delegate ()
+                            {
+                                foreach (Socket item in clientList.ToList())
                                 {
-                                    item.Send(Serialize(dt));
+                                    if (item != null && item != client)
+                                    {
+                                        item.Send(Serialize(dt));
+                                    }
                                 }
-                            }
-                        });
+                            });
+                        }
+                        catch { }
 
                     }
                     //Đăng nhập
@@ -186,22 +202,26 @@ namespace Server
                             dt.id = Id.ToString();
                             dt.msg = "on";
                             dt.style = 5;
-                            this.BeginInvoke((MethodInvoker)delegate ()
+                            try
                             {
-                                foreach (Socket item in clientList)
+                                this.BeginInvoke((MethodInvoker)delegate ()
                                 {
-                                    if (item != null)
+                                    foreach (Socket item in clientList.ToList())
                                     {
-                                        item.Send(Serialize(dt));
+                                        if (item != null && item != client)
+                                        {
+                                            item.Send(Serialize(dt));
+                                        }
                                     }
-                                }
-                            });
+                                });
+                            }
+                            catch { }
                         }                                               
                     }
                     //Tạo tài khoản
                     if (message.style == 2)
                     {
-                        if (check_name(message.tk,message.ten,0))
+                        if (check_name(message.tk,message.ten,"",0))
                         {
                             int temp = 1;
                             client.Send(Serialize(temp.ToString()));
@@ -268,35 +288,58 @@ namespace Server
                         dt.style = 1;
                         dt.id_send = message.id_send;
                         dt.id_recv = message.id_recv;
-                        this.BeginInvoke((MethodInvoker)delegate ()
+                        try
                         {
-                            foreach (Socket item in clientList)
+                            this.BeginInvoke((MethodInvoker)delegate ()
                             {
-                                if (item != null)
+                                foreach (Socket item in clientList)
                                 {
-                                    item.Send(Serialize(dt));
+                                    if (item != null)
+                                    {
+                                        item.Send(Serialize(dt));
+                                    }
                                 }
-                            }
-                        });
+                            });
+                        }
+                        catch { }
                     }
                     //update tài khoản,thay đỗi thông tin
                     if (message.style == 5)
                     {
                         data dt = new data();
-                        DataSet ds = new DataSet();
-                        Create_Connect();
-                        string sql = "Update Account set Taikhoan=@tk,Matkhau=@mk,Img=@img,Ngaysinh=@ns,Sex=@s,Ten=@ten  where Id=@id";
-                        SqlCommand cmd = strConnect.CreateCommand();
-                        cmd.CommandText = sql;
-                        cmd.Parameters.Add("@tk", SqlDbType.NVarChar).Value = message.tk;
-                        cmd.Parameters.Add("@mk", SqlDbType.NVarChar).Value = message.mk;
-                        cmd.Parameters.Add("@img", SqlDbType.Image).Value = message.img;
-                        cmd.Parameters.Add("@ns", SqlDbType.NVarChar).Value = message.ngaysinh;
-                        cmd.Parameters.Add("@s", SqlDbType.NVarChar).Value = message.sex;
-                        cmd.Parameters.Add("@ten", SqlDbType.NVarChar).Value = message.ten;
-                        cmd.Parameters.Add("@id", SqlDbType.Int).Value = message.id;
-                        cmd.ExecuteNonQuery();
-                        strConnect.Close();
+                        if (check_name(message.tk, message.ten,message.id, 3))
+                        {
+                            dt.style = 0;
+                            client.Send(Serialize(dt));
+                        }
+                        if (check_name(message.email, "",message.id, 2))
+                        {
+                            dt.style = 1;
+                            client.Send(Serialize(dt));
+                        }
+                        if (check_name(message.tk, message.ten,message.id, 3) == false && check_name(message.email, "",message.id, 2) == false)
+                        {
+                            Create_Connect();
+                            string sql = "Update Account set Taikhoan=@tk,Matkhau=@mk,Img=@img,Ngaysinh=@ns,Sex=@s,Ten=@ten,Email=@em  where Id=@id";
+                            SqlCommand cmd = strConnect.CreateCommand();
+                            cmd.CommandText = sql;
+                            cmd.Parameters.Add("@tk", SqlDbType.NVarChar).Value = message.tk;
+                            cmd.Parameters.Add("@mk", SqlDbType.NVarChar).Value = message.mk;
+                            cmd.Parameters.Add("@img", SqlDbType.Image).Value = message.img;
+                            cmd.Parameters.Add("@ns", SqlDbType.NVarChar).Value = message.ngaysinh;
+                            cmd.Parameters.Add("@s", SqlDbType.NVarChar).Value = message.sex;
+                            cmd.Parameters.Add("@ten", SqlDbType.NVarChar).Value = message.ten;
+                            cmd.Parameters.Add("@id", SqlDbType.Int).Value = message.id;
+                            cmd.Parameters.Add("@em", SqlDbType.NVarChar).Value = message.email;
+                            cmd.ExecuteNonQuery();
+                            dt.tk = message.tk;
+                            dt.email = message.email;
+                            dt.ten = message.ten;
+                            dt.style = 2;
+                            dt.img = message.img;
+                            client.Send(Serialize(dt));
+                            strConnect.Close();
+                        }                       
                     }
                     //Thêm trạng thái vào danh sách kết bạn
                     if (message.style==6)
@@ -377,16 +420,20 @@ namespace Server
                         dt.ds = ds;
                         dt.id_recv = message.id_recv;
                         strConnect.Close();
-                        this.BeginInvoke((MethodInvoker)delegate ()
+                        try
                         {
-                            foreach (Socket item in clientList)
+                            this.BeginInvoke((MethodInvoker)delegate ()
                             {
-                                if (item != null)
+                                foreach (Socket item in clientList)
                                 {
-                                    item.Send(Serialize(dt));
+                                    if (item != null)
+                                    {
+                                        item.Send(Serialize(dt));
+                                    }
                                 }
-                            }
-                        });
+                            });
+                        }
+                        catch { }
                     }  
                     //Chấp nhận kết bạn
                     if (message.style==10)
@@ -415,26 +462,30 @@ namespace Server
                         sql = "select Ketban.Status,Ketban.Nguoigui,Ketban.Nguoinhan,Account.Ten,Ketban.Readed from Account,Ketban where Ketban.Nguoinhan='" + message.id_send + "'and Ketban.Nguoigui=Account.Id or Ketban.Nguoigui='" + message.id_send + "' and Ketban.Nguoinhan=Account.Id and Ketban.Status='Accept'";
                         adapter.SelectCommand.CommandText = sql;
                         adapter.Fill(ds, "ketban2");
-                        sql = "select Account.Ten,Account.Id,Account.Img from Account,Friend where Friend.Id_M='" + message.id_send + "' and Friend.Id_N=Account.Id or Friend.Id_N='" + message.id_send + "' and Friend.Id_M=Account.Id";
+                        sql = "select Account.Ten,Account.Id,Account.Img,Account.Trangthai from Account,Friend where Friend.Id_M='" + message.id_send + "' and Friend.Id_N=Account.Id or Friend.Id_N='" + message.id_send + "' and Friend.Id_M=Account.Id";
                         adapter.SelectCommand.CommandText =sql;
                         adapter.Fill(ds,"ban1");
-                        sql = "select Account.Ten,Account.Id,Account.Img from Account,Friend where Friend.Id_M='" + message.id_recv + "' and Friend.Id_N=Account.Id or Friend.Id_N='" + message.id_recv + "' and Friend.Id_M=Account.Id";
+                        sql = "select Account.Ten,Account.Id,Account.Img,Account.Trangthai from Account,Friend where Friend.Id_M='" + message.id_recv + "' and Friend.Id_N=Account.Id or Friend.Id_N='" + message.id_recv + "' and Friend.Id_M=Account.Id";
                         adapter.SelectCommand.CommandText = sql;
                         adapter.Fill(ds, "ban2");
                         strConnect.Close();
                         dt.ds = ds;
                         dt.id_recv = message.id_send;
                         dt.id_send = message.id_recv;
-                        this.BeginInvoke((MethodInvoker)delegate ()
+                        try
                         {
-                            foreach (Socket item in clientList)
+                            this.BeginInvoke((MethodInvoker)delegate ()
                             {
-                                if (item != null)
+                                foreach (Socket item in clientList)
                                 {
-                                    item.Send(Serialize(dt));
+                                    if (item != null)
+                                    {
+                                        item.Send(Serialize(dt));
+                                    }
                                 }
-                            }
-                        });
+                            });
+                        }
+                        catch { }
                     }
                     //Từ chối kết bạn
                     if (message.style==11)
@@ -460,24 +511,30 @@ namespace Server
                             "or (Id_N='" + message.id_recv + "' and Id_M='" + message.id_send + "')";
                         SqlCommand cmd = new SqlCommand(sql, strConnect);
                         cmd.ExecuteNonQuery();
-                        sql = "select Account.Ten,Account.Id,Account.Img from Account,Friend where Friend.Id_M='" + message.id_send + "' and Friend.Id_N=Account.Id or Friend.Id_N='" + message.id_send + "' and Friend.Id_M=Account.Id";
+                        sql = "select Account.Ten,Account.Id,Account.Img,Account.Trangthai from Account,Friend where Friend.Id_M='" + message.id_send + "' and Friend.Id_N=Account.Id or Friend.Id_N='" + message.id_send + "' and Friend.Id_M=Account.Id";
                         SqlDataAdapter adapter = new SqlDataAdapter(sql, strConnect);
                         adapter.Fill(ds, "ban1");
-                        sql = "select Account.Ten,Account.Id,Account.Img from Account,Friend where Friend.Id_M='" + message.id_recv + "' and Friend.Id_N=Account.Id or Friend.Id_N='" + message.id_recv + "' and Friend.Id_M=Account.Id";
+                        sql = "select Account.Ten,Account.Id,Account.Img,Account.Trangthai from Account,Friend where Friend.Id_M='" + message.id_recv + "' and Friend.Id_N=Account.Id or Friend.Id_N='" + message.id_recv + "' and Friend.Id_M=Account.Id";
                         adapter.SelectCommand.CommandText = sql;
                         adapter.Fill(ds, "ban2");
                         dt.ds = ds;
                         strConnect.Close();
-                        this.BeginInvoke((MethodInvoker)delegate ()
+                        try
                         {
-                            foreach (Socket item in clientList)
+                            this.BeginInvoke((MethodInvoker)delegate ()
                             {
-                                if (item != null)
+                                foreach (Socket item in clientList)
                                 {
-                                    item.Send(Serialize(dt));
+                                    if (item != null)
+                                    {
+                                        item.Send(Serialize(dt));
+                                    }
                                 }
-                            }
-                        });
+                            });
+                        }
+                        catch 
+                        {
+                        }
                     }
                     //Tạo nhóm,add thành viên
                     if (message.style==13)
@@ -485,7 +542,8 @@ namespace Server
                         int id_nhom=0;
                         data dt = new data();
                         dt.style = 4;
-                        if (check_name(message.msg,"",1))
+                        dt.ngaysinh = "N', đã thêm bạn vào nhóm " + message.msg + "'";
+                        if (check_name(message.msg,"","",1))
                         {
                             dt.msg = "fail";
                             client.Send(Serialize(dt));
@@ -494,9 +552,10 @@ namespace Server
                         {
                             DataSet ds = new DataSet();
                             Create_Connect();
-                            string sql = "Insert into Nhom(Tennhom) values(@ten)";
+                            string sql = "Insert into Nhom(Tennhom,Nguoitao) values(@ten,@nt)";
                             SqlCommand cmd = new SqlCommand(sql, strConnect);
                             cmd.Parameters.Add("@ten", SqlDbType.NVarChar).Value = message.msg;
+                            cmd.Parameters.Add("@nt", SqlDbType.Int).Value =int.Parse(message.id);
                             cmd.ExecuteNonQuery();
                             sql = "select Id from Nhom where Tennhom='" + message.msg + "'";
                             cmd.CommandText = sql;
@@ -510,31 +569,42 @@ namespace Server
                                     }
                                 }
                             }
-                            foreach (DataRow row in message.ds.Tables["Thanhvien"].Rows)
+                            DataTable dataTable = message.ds.Tables["Thanhvien"];
+                            foreach (DataRow row in dataTable.Rows)
                             {
                                 sql = "Insert into Thanhvien(Id_nhom,Id_account) values ('"+id_nhom+"','"+row["Id"]+"')";
                                 cmd.CommandText = sql;
                                 cmd.ExecuteNonQuery();
+                                sql = "Insert into Ketban (Nguoigui,Nguoinhan,Status,Readed) values (" + message.id + "," + row["Id"] + "," + dt.ngaysinh + "," + 0 + ")";
+                                cmd.CommandText = sql;
+                                cmd.ExecuteNonQuery();
                             }
-                            ds.Tables.Add(message.ds.Tables["Thanhvien"]);
                             dt.id = id_nhom.ToString();
                             dt.ten = message.msg;
-                            dt.ds = ds;
+                            dt.ds = message.ds;
+                            dt.tk = message.ten;
                             dt.msg = "success";
-                            //client.Send(Serialize(dt));
                             strConnect.Close();
-                            this.BeginInvoke((MethodInvoker)delegate ()
+                            try
                             {
-                                foreach (Socket item in clientList)
+                                this.BeginInvoke((MethodInvoker)delegate ()
                                 {
-                                    if (item != null)
+                                    foreach (Socket item in clientList)
                                     {
-                                        item.Send(Serialize(dt));
+                                        if (item != null)
+                                        {
+                                            item.Send(Serialize(dt));
+                                        }
                                     }
-                                }
-                            });
+                                });
+                            }
+                            catch
+                            {
+
+                            }
                         }                       
                     } 
+                    //cập nhật trạng thái on-off
                     if (message.style==14)
                     {
                         data dt = new data();
@@ -546,40 +616,108 @@ namespace Server
                         SqlCommand cmd = new SqlCommand(sql, strConnect);
                         cmd.ExecuteNonQuery();
                         strConnect.Close();
-                        clientList.Remove(client);
-                        this.BeginInvoke((MethodInvoker)delegate ()
+                        try
                         {
-                            foreach (Socket item in clientList)
+                            this.BeginInvoke((MethodInvoker)delegate ()
                             {
-                                if (item != null)
+                                foreach (Socket item in clientList.ToList())
                                 {
-                                    item.Send(Serialize(dt));
+                                    if (item != null && item != client)
+                                    {
+                                        item.Send(Serialize(dt));
+                                    }
                                 }
+                            });
+                        }
+                        catch {}
+                    }
+                    if (message.style==15)
+                    {
+                        data dt = new data();
+                        Create_Connect();
+                        string sql = "select Matkhau from Account where Email='"+message.msg+"'";
+                        SqlCommand cmd = new SqlCommand(sql,strConnect);
+                        SqlDataReader reader = cmd.ExecuteReader();
+                        if (reader.Read())
+                        {
+                            string pass = reader.GetString(0);
+                            bool check = Send_Email(message.msg,Decrypt(pass));
+                            if (check)
+                            {
+                                dt.msg = "true";
+                                client.Send(Serialize(dt));
+                            }   
+                            else
+                            {
+                                dt.msg = "false";
+                                client.Send(Serialize(dt));
                             }
-                        });
+                        }
+                        strConnect.Close();
                     }    
                 }
             }
-            catch (Exception e)
+            catch //(Exception e)
             {
                 //MessageBox.Show(e.Message);
                 clientList.Remove(client);
                 client.Close();
             }
         }
-
-        public bool check_name(string s, string t,int signal)
+        public bool Send_Email(string email,string pass)
+        {
+            SmtpClient Client = new SmtpClient()
+            {
+                Host = "smtp.gmail.com",
+                Port=587,
+                EnableSsl=true,
+                DeliveryMethod=SmtpDeliveryMethod.Network,
+                UseDefaultCredentials=false,
+                Credentials =new NetworkCredential()
+                {
+                    UserName="kanekirito1278@gmail.com",
+                    Password="1277624312"
+                }
+            };
+            MailAddress FromEmail = new MailAddress("kanekirito1278@gmail.com", "App_Chat");
+            MailAddress ToEmail = new MailAddress(email, "someone");
+            MailMessage message = new MailMessage()
+            {
+                From = FromEmail,
+                Subject = "Your password in application chat!",
+                Body = pass,
+            };
+            message.To.Add(ToEmail);
+            try
+            {
+                Client.Send(message);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        public bool check_name(string s, string t,string id,int signal)
         {
             Create_Connect();
-            string sqll;
+            string sqll="";
             if (signal==0)
             {
                 sqll = "select Taikhoan from Account where Taikhoan='" + s + "'or Ten='" + t + "'";
             }    
-            else
+            if (signal==1)
             {
                 sqll = "select Tennhom from Nhom where Tennhom='" + s + "'";
-            }    
+            }   
+            if (signal==2)
+            {
+                sqll = "select Email from Account where Email='" + s + "' and Id<>'"+id+"'" ;
+            }  
+            if (signal==3)
+            {
+                sqll = "select Taikhoan from Account where (Taikhoan='" + s + "'or Ten='" + t + "') and Id<>'" + id + "'";
+            }
             SqlCommand cmd = new SqlCommand(sqll, strConnect);
             SqlDataReader dta = cmd.ExecuteReader();
             if (dta.Read() == true)
@@ -643,6 +781,31 @@ namespace Server
         {
             Connect();
             button2.Enabled = false;
+        }
+        public static string Decrypt(string toDecrypt)
+        {
+            string key = "Kamisama43423";
+            bool useHashing = true;
+            byte[] keyArray;
+            byte[] toEncryptArray = Convert.FromBase64String(toDecrypt);
+
+            if (useHashing)
+            {
+                MD5CryptoServiceProvider hashmd5 = new MD5CryptoServiceProvider();
+                keyArray = hashmd5.ComputeHash(UTF8Encoding.UTF8.GetBytes(key));
+            }
+            else
+                keyArray = UTF8Encoding.UTF8.GetBytes(key);
+
+            TripleDESCryptoServiceProvider tdes = new TripleDESCryptoServiceProvider();
+            tdes.Key = keyArray;
+            tdes.Mode = CipherMode.ECB;
+            tdes.Padding = PaddingMode.PKCS7;
+
+            ICryptoTransform cTransform = tdes.CreateDecryptor();
+            byte[] resultArray = cTransform.TransformFinalBlock(toEncryptArray, 0, toEncryptArray.Length);
+
+            return UTF8Encoding.UTF8.GetString(resultArray);
         }
     }
 }

@@ -48,7 +48,7 @@ namespace bunifu
                 string s = row["Ten"].ToString();
                 string Id = row["Id"].ToString();
                 string Trangthai = row["Trangthai"].ToString();
-                if(row["Img"]!=null)
+                if(!row.IsNull("Img"))
                 {
                     img = (byte[])row["Img"];
                 }
@@ -68,14 +68,14 @@ namespace bunifu
             strConnect.ConnectionString = str;
             strConnect.Open();
         }
-        public void showchatbox(string s,byte[] img,string ten,string loai_mes,string trangthai)
+        public void showchatbox(string s,byte[] img,string ten,string loai_mes,string trangthai,string Ten_nhom)
         {
             DataSet ds = new DataSet();
             Id_B = s;
             int width = panel3.Width;
             chat = new chatbox();
             chat.Dock = DockStyle.Fill;
-            chat.Thongtin(ten,img,my_image,loai_mes,My_name,datat,trangthai);
+            chat.Thongtin(ten,img,my_image,loai_mes,My_name,datat,trangthai,Ten_nhom);
             chat.IdM(Id_M);
             chat.IdN(s);
             Create_Connect();

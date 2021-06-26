@@ -18,7 +18,7 @@ namespace bunifu
         public int id_send=0;
         public int id_recv=0;
         public string time="";
-        public DataSet ds;
+        public DataSet ds=new DataSet();
         public byte[] img=new byte[1];
         public string ngaysinh = "";
         public string ngaytao = "";
@@ -27,5 +27,6 @@ namespace bunifu
         public string loai_mes = "0";
         public string loai_nhan = "0";
         public byte[] image=new byte[1];
+        public string email = "";
     }
 }

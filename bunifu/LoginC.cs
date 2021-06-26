@@ -22,6 +22,25 @@ namespace bunifu
         {
             InitializeComponent();
             CheckForIllegalCrossThreadCalls = false;
+            string path = @"tk_mk.txt";
+            if (File.Exists(path))
+            {
+                using (FileStream fs = File.OpenRead(path))
+                {
+                    StreamReader sd = new StreamReader(fs);
+                    string ct = sd.ReadToEnd();
+                    string[] content = ct.Split('\n');
+                    guna2TextBox1.Text = content[0];
+                    guna2TextBox2.Text = content[1];
+                    if (content[2] == "0")
+                    {
+                        guna2CheckBox1.Checked = false;
+                    }
+                    else
+                        guna2CheckBox1.Checked = true;
+
+                }
+            }            
         }
         IPEndPoint IP;
         Socket client;
@@ -173,6 +192,18 @@ namespace bunifu
                     dt.style = 1;
                     Send(dt);
                     guna2Button1.Enabled = false;
+                    //lưu tài khoản ,mật khẩu
+                    string path = @"tk_mk.txt";
+                    if (guna2CheckBox1.Checked == true)
+                    {
+                        String content = guna2TextBox1.Text + "\n" + guna2TextBox2.Text + "\n" + "1";
+                        File.WriteAllText(path, content);
+                    }
+                    else
+                    {
+                        if (File.Exists(path))
+                            File.Delete(path);
+                    }
                 }
                 catch { }
             }
@@ -222,12 +253,72 @@ namespace bunifu
                         dt.style = 1;
                         Send(dt);
                         guna2Button1.Enabled = false;
+                        //lưu tài khoản ,mật khẩu
+                        string path = @"tk_mk.txt";
+                        if (guna2CheckBox1.Checked == true)
+                        {
+                            String content = guna2TextBox1.Text + "\n" + guna2TextBox2.Text + "\n" + "1";
+                            File.WriteAllText(path, content);                       
+                        }
+                        else
+                        {
+                            if (File.Exists(path))
+                                File.Delete(path);
+                        }
                     }
                     catch { }
                 }
                 else
                     MessageBox.Show("Vui lòng nhập tài khoản,mật khẩu", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
+        }
+
+        private void guna2CheckBox1_CheckedChanged(object sender, EventArgs e)
+        {
+           
+        }
+
+        private void guna2TextBox1_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                if (guna2TextBox1.Text != "" && guna2TextBox2.Text != "")
+                {
+                    try
+                    {
+                        Connect();
+                        data dt = new data();
+                        string tk = guna2TextBox1.Text;
+                        string mk = Encrypt(guna2TextBox2.Text);
+                        dt.tk = tk;
+                        dt.mk = mk;
+                        dt.style = 1;
+                        Send(dt);
+                        guna2Button1.Enabled = false;
+                        //lưu tài khoản ,mật khẩu
+                        string path = @"tk_mk.txt";
+                        if (guna2CheckBox1.Checked == true)
+                        {
+                            String content = guna2TextBox1.Text + "\n" + guna2TextBox2.Text + "\n" + "1";
+                            File.WriteAllText(path, content);
+                        }
+                        else
+                        {
+                            if (File.Exists(path))
+                                File.Delete(path);
+                        }
+                    }
+                    catch { }
+                }
+                else
+                    MessageBox.Show("Vui lòng nhập tài khoản,mật khẩu", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+            Login login = (Login)(this.ParentForm);
+            login.Forgot_pass();
         }
     }
 }

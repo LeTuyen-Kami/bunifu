@@ -90,5 +90,12 @@ namespace bunifu
             a = bunifuGradientPanel1.GradientTopLeft;
             b = bunifuGradientPanel1.GradientBottomRight;
         }
+        public void Forgot_pass()
+        {
+            Forgot_pass forgot_Pass = new Forgot_pass();
+            forgot_Pass.Dock = DockStyle.Fill;
+            panel2.Controls.Add(forgot_Pass);
+            forgot_Pass.BringToFront();
+        }
     }
 }
