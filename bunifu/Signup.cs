@@ -85,7 +85,7 @@ namespace bunifu
             }
             catch
             {
-                close();
+                //close();
             }
         }
         byte[] Serialize(object obj)

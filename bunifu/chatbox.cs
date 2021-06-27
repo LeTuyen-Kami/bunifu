@@ -41,11 +41,11 @@ namespace bunifu
         {
             left_mes = width;
             buble bb1=new buble();
-            if (loainhan=="0")
+            if (loainhan=="0"&&message!="")
             {
                bb1 = new buble(message, time, a);
             }
-            if (message=="")
+            if (message==""&&loainhan=="0")
             {
                 bb1 = new buble(1);
             }    

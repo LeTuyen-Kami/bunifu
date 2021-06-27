@@ -143,7 +143,7 @@ namespace bunifu
                 Id_chatbox = dt.id_recv.ToString();
             if (Id_chatbox == Id_B && dt.id_send.ToString() != Id_M)
             {
-                chat.addinmessage(s, time, buble.msgtype.In, width, img,name,"0",null);
+                chat.addinmessage(s, time, buble.msgtype.In, width, img,name,dt.loai_nhan,dt.image);
             }
 
         }

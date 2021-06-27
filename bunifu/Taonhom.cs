@@ -111,7 +111,7 @@ namespace bunifu
             catch (Exception e)
             {
                 //MessageBox.Show(e.Message);
-                close();
+                //close();
             }
         }
         byte[] Serialize(object obj)

@@ -191,7 +191,7 @@ namespace bunifu
                                     danhsach.add_mes(message, 1);
                                 }
                             }
-                            if (message.ds.Tables["Tag"].Rows.Count>0&& check_have(message.id_recv.ToString())!="")
+                            if (message.ds.Tables["Tag"]!=null&& check_have(message.id_recv.ToString())!=""&& message.loai_mes == "1"&& message.loai_mes == "0")
                                 foreach (DataRow row in message.ds.Tables["Tag"].Rows)
                                 {
                                     if (row["Id"].ToString() == Id_M)

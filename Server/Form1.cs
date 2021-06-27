@@ -126,6 +126,7 @@ namespace Server
                         dt.msg = message.msg;
                         dt.id_recv = message.id_recv;
                         dt.img = message.img;
+                        dt.image = message.image;
                         dt.loai_mes = message.loai_mes;
                         dt.loai_nhan = message.loai_nhan;
                         dt.id_send = message.id_send;
@@ -144,7 +145,7 @@ namespace Server
                         cmd.Parameters.Add("@ln", SqlDbType.NVarChar).Value = message.loai_nhan;
                         cmd.Parameters.Add("@dtb", SqlDbType.Image).Value = message.image;
                         cmd.ExecuteNonQuery();
-                        if (message.ds.Tables["Tag"].Rows.Count > 0)
+                        if (message.ds.Tables["Tag"]!=null)
                         {
                             foreach (DataRow row in message.ds.Tables["Tag"].Rows)
                             {
@@ -672,7 +673,7 @@ namespace Server
             {
                 //MessageBox.Show(e.Message);
                 clientList.Remove(client);
-                client.Close();
+                //client.Close();
             }
         }
         public bool Send_Email(string email,string pass)
