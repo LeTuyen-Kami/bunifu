@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
+using Guna.UI2.WinForms;
 
 namespace bunifu
 {
@@ -85,6 +86,10 @@ namespace bunifu
         public void usercontrol(UserControl userControl)
         {
             control = userControl;
+        }
+
+        private void guna2Button1_MouseDown(object sender, MouseEventArgs e)
+        {           
         }
     }
 }

@@ -25,6 +25,8 @@ namespace bunifu
         string TenNhom;
         DataTable dt_friend;
         DataTable dt_send=new DataTable();
+        int point;
+        int height=0;
         public chatbox()
         {
             if (!this.DesignMode)
@@ -101,6 +103,8 @@ namespace bunifu
             clt.Connect();
             guna2DataGridView1.BringToFront();
             panel1.Controls.Add(guna2DataGridView1);
+            point = panel1.Bottom;
+            height = guna2DataGridView1.Height;
         }
         public void Thongtin(string s,byte[] img,byte[] my_pic,string loai_mes,string name,DataTable data_friend,string trangthai,string Ten_nhom)
         {
@@ -244,7 +248,14 @@ namespace bunifu
                     richTextBox1.Select(vitri + 1 + b, 0);
                     guna2DataGridView1.Size = new Size(guna2DataGridView1.Width,
                         (guna2DataGridView1.RowCount) * guna2DataGridView1.RowTemplate.Height);
-                    guna2DataGridView1.Top = bb_old.Bottom;
+                    if (bb_old.Bottom >point)
+                    {
+                        guna2DataGridView1.Top = bb_old.Bottom;
+                    }
+                    else
+                    {
+                        guna2DataGridView1.Location = new Point(guna2DataGridView1.Location.X, panel1.Bottom - guna2DataGridView1.Height);
+                    }    
                     guna2DataGridView1.Visible = true;
                     panel1.VerticalScroll.Value = panel1.VerticalScroll.Maximum;
                 }
@@ -337,7 +348,14 @@ namespace bunifu
                 guna2DataGridView1.DataSource = dt;
                 guna2DataGridView1.Size = new Size(guna2DataGridView1.Width,
                             guna2DataGridView1.RowCount * guna2DataGridView1.RowTemplate.Height);
-                guna2DataGridView1.Top = bb_old.Bottom;
+                if (bb_old.Bottom > point + height)
+                {
+                    guna2DataGridView1.Top = bb_old.Bottom;
+                }
+                else
+                {
+                    guna2DataGridView1.Location = new Point(guna2DataGridView1.Location.X, panel1.Bottom - guna2DataGridView1.Height);
+                }
             }
             if (e.KeyChar == 8&&loaimes=="1")
             {

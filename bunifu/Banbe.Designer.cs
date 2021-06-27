@@ -60,6 +60,7 @@
             this.guna2Button1.Text = "guna2Button1";
             this.guna2Button1.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.guna2Button1.Click += new System.EventHandler(this.guna2Button1_Click);
+            this.guna2Button1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.guna2Button1_MouseDown);
             // 
             // guna2CirclePictureBox1
             // 
