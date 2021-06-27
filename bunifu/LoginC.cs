@@ -93,6 +93,7 @@ namespace bunifu
                     client.Receive(datat);
                     //chuyển data từ dạng byte sang dạng string
                     string dt = (string)Deseriliaze(datat);
+                    
                     if (this.InvokeRequired)
                         this.BeginInvoke((MethodInvoker)delegate ()
                         {

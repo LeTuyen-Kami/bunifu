@@ -294,7 +294,7 @@ namespace Server
                         {
                             this.BeginInvoke((MethodInvoker)delegate ()
                             {
-                                foreach (Socket item in clientList)
+                                foreach (Socket item in clientList.ToList())
                                 {
                                     if (item != null)
                                     {
@@ -426,7 +426,7 @@ namespace Server
                         {
                             this.BeginInvoke((MethodInvoker)delegate ()
                             {
-                                foreach (Socket item in clientList)
+                                foreach (Socket item in clientList.ToList())
                                 {
                                     if (item != null)
                                     {
@@ -478,7 +478,7 @@ namespace Server
                         {
                             this.BeginInvoke((MethodInvoker)delegate ()
                             {
-                                foreach (Socket item in clientList)
+                                foreach (Socket item in clientList.ToList())
                                 {
                                     if (item != null)
                                     {
@@ -525,7 +525,7 @@ namespace Server
                         {
                             this.BeginInvoke((MethodInvoker)delegate ()
                             {
-                                foreach (Socket item in clientList)
+                                foreach (Socket item in clientList.ToList())
                                 {
                                     if (item != null)
                                     {
@@ -544,7 +544,6 @@ namespace Server
                         int id_nhom = 0;
                         data dt = new data();
                         dt.style = 4;
-                        dt.ngaysinh = "N', đã thêm bạn vào nhóm " + message.msg + "'";
                         if (check_name(message.msg, "", "", 1))
                         {
                             dt.msg = "fail";
@@ -552,6 +551,7 @@ namespace Server
                         }
                         else
                         {
+                            dt.ngaysinh = "N', đã thêm bạn vào nhóm " + message.msg + "'";
                             DataSet ds = new DataSet();
                             Create_Connect();
                             string sql = "Insert into Nhom(Tennhom,Nguoitao) values(@ten,@nt)";
@@ -577,9 +577,12 @@ namespace Server
                                 sql = "Insert into Thanhvien(Id_nhom,Id_account) values ('" + id_nhom + "','" + row["Id"] + "')";
                                 cmd.CommandText = sql;
                                 cmd.ExecuteNonQuery();
-                                sql = "Insert into Ketban (Nguoigui,Nguoinhan,Status,Readed) values (" + message.id + "," + row["Id"] + "," + dt.ngaysinh + "," + 0 + ")";
-                                cmd.CommandText = sql;
-                                cmd.ExecuteNonQuery();
+                                if (row["Id"].ToString() != message.id)
+                                {
+                                    sql = "Insert into Ketban (Nguoigui,Nguoinhan,Status,Readed) values (" + message.id + "," + row["Id"] + "," + dt.ngaysinh + "," + 0 + ")";
+                                    cmd.CommandText = sql;
+                                    cmd.ExecuteNonQuery();
+                                }                     
                             }
                             dt.id = id_nhom.ToString();
                             dt.ten = message.msg;
@@ -591,7 +594,7 @@ namespace Server
                             {
                                 this.BeginInvoke((MethodInvoker)delegate ()
                                 {
-                                    foreach (Socket item in clientList)
+                                    foreach (Socket item in clientList.ToList())
                                     {
                                         if (item != null)
                                         {
@@ -642,6 +645,7 @@ namespace Server
                     {
                         data dt = new data();
                         Create_Connect();
+                        dt.style = 999;
                         string sql = "select Matkhau from Account where Email='" + message.msg + "'";
                         SqlCommand cmd = new SqlCommand(sql, strConnect);
                         SqlDataReader reader = cmd.ExecuteReader();

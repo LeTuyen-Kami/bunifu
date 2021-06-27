@@ -133,7 +133,7 @@ namespace bunifu
                     {
                         foreach (DataRow row in message.ds.Tables["Thanhvien"].Rows)
                         {
-                            if (row["Id"].ToString() == Id_M)
+                            if (row["Id"].ToString() == Id_M&&message.msg=="success")
                             {
                                 if (message.tk!=My_name)
                                 {
@@ -453,7 +453,9 @@ namespace bunifu
             Color color = ActivateButton(sender);
             panel1.BackColor = color;
             Taonhom taonhom = new Taonhom(color);
-            taonhom.nhap(datafriend, Id_M,My_name);
+            DataTable tam = new DataTable("Friend");
+            tam = datafriend.Copy();
+            taonhom.nhap(tam, Id_M,My_name);
             taonhom.ShowDialog();
         }
 

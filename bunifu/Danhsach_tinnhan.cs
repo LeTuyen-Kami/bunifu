@@ -38,6 +38,8 @@ namespace bunifu
             My_name = name;
             my_image = pic;
             Panel panel = new Panel();
+            panel.Dock = DockStyle.Fill;
+            panel.AutoScroll = true;
             panel5.Controls.Add(panel);
             Id_M = id;
             datat = dataTable_ac;
@@ -185,6 +187,7 @@ namespace bunifu
                 Panel panel = new Panel();
                 panel5.Controls.Add(panel);
                 panel.Dock = DockStyle.Fill;
+                panel.AutoScroll = true;
                 panel.BringToFront();
                 foreach (DataRow row in data_nhom.Rows)
                 {
@@ -204,6 +207,7 @@ namespace bunifu
                 label2.Text = "Friend";
                 Panel panel = new Panel();
                 panel5.Controls.Add(panel);
+                panel.AutoScroll = true;
                 panel.BringToFront();
                 panel.Dock = DockStyle.Fill;
                 foreach (DataRow row in datat.Rows)

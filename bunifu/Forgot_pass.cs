@@ -68,13 +68,16 @@ namespace bunifu
                     client.Receive(datat);
                     //chuyển data từ dạng byte sang dạng string
                     data dt = (data)Deseriliaze(datat);
-                    if (dt.msg=="true")
+                    if (dt.style == 999)
                     {
-                        MessageBox.Show("Please check your email for the password!", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    }    
-                    else
-                    {
-                        MessageBox.Show("There's no such email address on the database!", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        if (dt.msg == "true")
+                        {
+                            MessageBox.Show("Please check your email for the password!", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+                        else
+                        {
+                            MessageBox.Show("There's no such email address on the database!", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
                     }
                 }
             }

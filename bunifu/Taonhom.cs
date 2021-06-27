@@ -18,7 +18,7 @@ namespace bunifu
 {
     public partial class Taonhom : Form
     {
-        DataTable dataTable;
+        DataTable dataTable = new DataTable();
         DataTable data_send_server = new DataTable("Thanhvien");
         DataTable dataid;
         DataTable data;
@@ -246,13 +246,6 @@ namespace bunifu
             //guna2DataGridView1.Rows.RemoveAt(position_of_row);
             guna2DataGridView1.Size = new Size(guna2DataGridView1.Width,
                             (guna2DataGridView1.RowCount) * guna2DataGridView1.RowTemplate.Height + 5);
-            //foreach (DataRow row in dataTable.Rows)
-            //{
-            //    if (row["Id"].ToString() == dataid.Rows[e.RowIndex]["Id"].ToString())
-            //    {
-            //        dataTable.Rows.Remove(row);
-            //    }
-            //}
             panel2.Controls.Add(thanhvien);
             thanhvien.Dock = DockStyle.Top;
         }
